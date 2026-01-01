@@ -1,9 +1,11 @@
 /* =========================================
-   AUDIO SYSTEM (Web Audio API)
+   AUDIO SYSTEM (Throttled)
    ========================================= */
 const AudioSys = {
     ctx: null,
-    
+    // Keep track of the last time a sound type played
+    lastPlayed: {}, 
+
     init() {
         if (!this.ctx) {
             this.ctx = new (window.AudioContext || window.webkitAudioContext)();
@@ -13,38 +15,50 @@ const AudioSys = {
         }
     },
 
-    playTone(type, freq, duration, vol = 0.1, slide = 0) {
+    playTone(key, type, freq, duration, vol = 0.1, slide = 0) {
         if (!this.ctx) return;
+        
+        // --- THROTTLE FIX ---
+        // If this sound key played less than 50ms ago, skip it.
+        const now = this.ctx.currentTime;
+        if (this.lastPlayed[key] && now - this.lastPlayed[key] < 0.05) {
+            return;
+        }
+        this.lastPlayed[key] = now;
+        // --------------------
+
         const osc = this.ctx.createOscillator();
         const gain = this.ctx.createGain();
         
-        osc.type = type; // sine, square, sawtooth, triangle
-        osc.frequency.setValueAtTime(freq, this.ctx.currentTime);
+        osc.type = type;
+        osc.frequency.setValueAtTime(freq, now);
         if (slide !== 0) {
-            osc.frequency.exponentialRampToValueAtTime(freq + slide, this.ctx.currentTime + duration);
+            osc.frequency.exponentialRampToValueAtTime(freq + slide, now + duration);
         }
 
-        gain.gain.setValueAtTime(vol, this.ctx.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + duration);
+        gain.gain.setValueAtTime(vol, now);
+        gain.gain.exponentialRampToValueAtTime(0.01, now + duration);
 
         osc.connect(gain);
         gain.connect(this.ctx.destination);
         osc.start();
-        osc.stop(this.ctx.currentTime + duration);
+        osc.stop(now + duration);
     },
 
-    shoot() { this.playTone('square', 400, 0.1, 0.05, -200); },
-    hit() { this.playTone('sawtooth', 100, 0.1, 0.05, -50); },
-    kill() { this.playTone('sawtooth', 80, 0.2, 0.08, -80); },
-    hurt() { this.playTone('sine', 150, 0.3, 0.2, -100); },
+    // Pass a unique 'key' as the first argument to group sounds
+    shoot()   { this.playTone('shoot', 'square', 400, 0.1, 0.05, -200); },
+    hit()     { this.playTone('hit', 'sawtooth', 100, 0.1, 0.05, -50); },
+    kill()    { this.playTone('kill', 'sawtooth', 80, 0.2, 0.08, -80); },
+    hurt()    { this.playTone('hurt', 'sine', 150, 0.3, 0.2, -100); },
+    powerup() { this.playTone('powerup', 'sine', 600, 0.3, 0.1, 300); },
+    
     levelUp() { 
-        this.playTone('sine', 440, 0.2, 0.1); 
-        setTimeout(() => this.playTone('sine', 554, 0.2, 0.1), 150);
-        setTimeout(() => this.playTone('sine', 659, 0.4, 0.1), 300);
-    },
-    powerup() { this.playTone('sine', 600, 0.3, 0.1, 300); }
+        // Level up sounds shouldn't be throttled heavily, so we use different keys
+        this.playTone('lvl1', 'sine', 440, 0.2, 0.1); 
+        setTimeout(() => this.playTone('lvl2', 'sine', 554, 0.2, 0.1), 150);
+        setTimeout(() => this.playTone('lvl3', 'sine', 659, 0.4, 0.1), 300);
+    }
 };
-
 /* =========================================
    GAME ENGINE & STATE
    ========================================= */
@@ -591,4 +605,5 @@ document.getElementById('restart-btn').addEventListener('click', initGame);
 document.getElementById('pause-btn').addEventListener('click', () => {
     state.paused = !state.paused;
     document.getElementById('pause-btn').innerText = state.paused ? "|>" : "||";
+
 });
