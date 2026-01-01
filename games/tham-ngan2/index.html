@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>TIME DEBT</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div id="ui-layer">
+        <div class="top-bar">
+            <div class="stat-box">
+                <span class="label">TIME LEFT</span>
+                <span id="time-display" class="value huge">60.00</span>
+            </div>
+            <div class="stat-box">
+                <span class="label">DRAIN RATE</span>
+                <span id="drain-display" class="value bad">-1.00/s</span>
+            </div>
+        </div>
+        
+        <div class="bottom-bar">
+            <div class="stat-box">
+                <span class="label">LEVEL</span>
+                <span id="level-display" class="value">1</span>
+            </div>
+            <div class="stat-box">
+                <span class="label">KILLS</span>
+                <span id="score-display" class="value">0</span>
+            </div>
+        </div>
+    </div>
+
+    <div id="start-screen" class="overlay active">
+        <h1 class="glitch" data-text="TIME DEBT">TIME DEBT</h1>
+        <p class="subtitle">TIME IS YOUR ONLY LIFE</p>
+        <p class="instructions">WASD / Joystick to Move • Auto Shoot</p>
+        <p class="instructions">Abilities cost TIME. Killing earns TIME.</p>
+        <button id="start-btn">INITIATE SEQUENCE</button>
+    </div>
+
+    <div id="game-over-screen" class="overlay">
+        <h1 class="bad">TIME EXPIRED</h1>
+        <p>You ran out of existence.</p>
+        <p>Level: <span id="final-level">0</span></p>
+        <button id="restart-btn">REBOOT TIMELINE</button>
+    </div>
+
+    <div id="upgrade-screen" class="overlay">
+        <h2>SYSTEM UPGRADE AVAILABLE</h2>
+        <p>Choose your debt.</p>
+        <div id="cards-container"></div>
+    </div>
+
+    <canvas id="game-canvas"></canvas>
+
+    <div id="joystick-zone"></div>
+
+    <script src="script.js"></script>
+</body>
+</html>
