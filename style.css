@@ -52,3 +52,26 @@ p {
     font-size: 18px;
     font-weight: bold;
 }
+@media (max-width: 600px) {
+
+    header h1 {
+        font-size: 1.8rem;
+    }
+
+    .game-list {
+        padding: 15px;
+        gap: 15px;
+    }
+
+    .game-card img {
+        height: 140px;
+    }
+
+    .game-card h3 {
+        font-size: 1.1rem;
+    }
+
+    .game-card p {
+        font-size: 0.85rem;
+    }
+}
