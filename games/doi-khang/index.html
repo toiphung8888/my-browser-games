@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MOMENTUM ARENA</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div id="game-container">
+        <div id="ui-layer">
+            <div class="player-hud p1-hud">
+                <div class="name">PLAYER 1 (WASD)</div>
+                <div class="bar-container">
+                    <div class="hp-bar" id="p1-hp"></div>
+                </div>
+                <div class="momentum-text" id="p1-mom">0 M</div>
+            </div>
+
+            <div class="center-hud">
+                <h1>MOMENTUM ARENA</h1>
+                <div id="message-area">PRESS ANY KEY TO START</div>
+            </div>
+
+            <div class="player-hud p2-hud">
+                <div class="name">PLAYER 2 (ARROWS)</div>
+                <div class="bar-container">
+                    <div class="hp-bar" id="p2-hp"></div>
+                </div>
+                <div class="momentum-text" id="p2-mom">0 M</div>
+            </div>
+        </div>
+
+        <canvas id="gameCanvas"></canvas>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
