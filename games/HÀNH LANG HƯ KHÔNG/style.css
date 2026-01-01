@@ -1,0 +1,202 @@
+:root {
+    --primary: #00ffaa;
+    --danger: #ff3333;
+    --bg: #050505;
+}
+
+* {
+    box-sizing: border-box;
+    user-select: none;
+    cursor: default;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    background: #000;
+    overflow: hidden;
+    font-family: 'Courier New', Courier, monospace;
+    color: var(--primary);
+}
+
+#game-container {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+}
+
+canvas {
+    display: block;
+    width: 100%;
+    height: 100%;
+    image-rendering: pixelated;
+}
+
+/* Post Processing */
+#crt-overlay {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+    background-size: 100% 2px, 3px 100%;
+    pointer-events: none;
+    z-index: 10;
+}
+
+#vignette {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: radial-gradient(circle, transparent 50%, black 100%);
+    pointer-events: none;
+    z-index: 11;
+}
+
+#damage-overlay {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    box-shadow: inset 0 0 0 0px var(--danger);
+    transition: box-shadow 0.1s;
+    pointer-events: none;
+    z-index: 12;
+}
+
+/* UI / HUD */
+#hud {
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    pointer-events: none;
+    z-index: 20;
+    padding: 20px;
+}
+
+#crosshair {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 24px;
+    color: rgba(0, 255, 170, 0.5);
+    text-shadow: 0 0 5px var(--primary);
+}
+
+#stats {
+    position: absolute;
+    bottom: 30px;
+    left: 30px;
+    width: 250px;
+}
+
+.stat-row {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+    text-shadow: 0 0 5px var(--primary);
+    font-weight: bold;
+}
+
+.stat-row span {
+    width: 50px;
+}
+
+.bar-container {
+    flex-grow: 1;
+    height: 12px;
+    border: 1px solid var(--primary);
+    background: rgba(0,0,0,0.5);
+}
+
+#hp-bar {
+    width: 100%;
+    height: 100%;
+    background: var(--primary);
+    transition: width 0.1s;
+}
+
+#heat-bar {
+    width: 0%;
+    height: 100%;
+    background: #ff8800;
+    transition: width 0.1s, background 0.2s;
+}
+
+#message-log {
+    position: absolute;
+    top: 30px;
+    left: 30px;
+    opacity: 0.7;
+}
+
+#radar {
+    position: absolute;
+    top: 30px;
+    right: 30px;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--danger);
+    box-shadow: 0 0 10px var(--danger);
+    opacity: 0;
+    transition: opacity 0.2s;
+}
+
+/* Menus */
+.menu {
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.9);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 30;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s;
+}
+
+.menu.visible {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+h1 {
+    font-size: 4rem;
+    margin-bottom: 0;
+    text-shadow: 0 0 20px var(--primary);
+    letter-spacing: 10px;
+}
+
+button {
+    margin-top: 30px;
+    padding: 15px 40px;
+    background: transparent;
+    border: 2px solid var(--primary);
+    color: var(--primary);
+    font-family: inherit;
+    font-size: 1.2rem;
+    font-weight: bold;
+    cursor: pointer;
+    text-transform: uppercase;
+}
+
+button:hover {
+    background: var(--primary);
+    color: black;
+    box-shadow: 0 0 20px var(--primary);
+}
+
+.controls {
+    color: #888;
+    line-height: 1.6;
+    text-align: center;
+    margin-top: 20px;
+}
+
+/* Utility classes for JS */
+.overheated #heat-bar { background: var(--danger); }
+.shake { animation: shake 0.3s cubic-bezier(.36,.07,.19,.97) both; }
+
+@keyframes shake {
+    10%, 90% { transform: translate3d(-2px, 0, 0); }
+    20%, 80% { transform: translate3d(4px, 0, 0); }
+    30%, 50%, 70% { transform: translate3d(-6px, 0, 0); }
+    40%, 60% { transform: translate3d(6px, 0, 0); }
+}

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VOID CORRIDOR</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="game-container">
+        <canvas id="screen"></canvas>
+        
+        <div id="crt-overlay"></div>
+        <div id="vignette"></div>
+        <div id="damage-overlay"></div>
+
+        <div id="hud">
+            <div id="stats">
+                <div class="stat-row">
+                    <span>HP:</span>
+                    <div class="bar-container"><div id="hp-bar"></div></div>
+                </div>
+                <div class="stat-row">
+                    <span>HEAT:</span>
+                    <div class="bar-container"><div id="heat-bar"></div></div>
+                </div>
+            </div>
+            <div id="crosshair">+</div>
+            <div id="radar"></div>
+            <div id="message-log">SYSTEM ONLINE...</div>
+        </div>
+
+        <div id="start-screen" class="menu visible">
+            <h1>VOID CORRIDOR</h1>
+            <p>SURVIVE THE DARKNESS</p>
+            <p class="controls">
+                [W,S] Move • [A,D] Strafe • [MOUSE] Look<br>
+                [LMB] Fire • [SHIFT] Dash
+            </p>
+            <button id="start-btn">INITIALIZE SYSTEM</button>
+        </div>
+
+        <div id="death-screen" class="menu">
+            <h1 style="color:red">SIGNAL LOST</h1>
+            <p>OPERATIVE DECEASED</p>
+            <button id="restart-btn">REBOOT</button>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
