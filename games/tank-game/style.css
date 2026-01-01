@@ -160,30 +160,3 @@ p {
     box-shadow: 0 0 30px var(--danger);
 
 }
-.mobile-controls {
-    display: none;
-}
-
-@media (max-width: 768px) {
-    .mobile-controls {
-        position: fixed;
-        bottom: 20px;
-        left: 0;
-        right: 0;
-        display: flex;
-        justify-content: space-between;
-        padding: 0 20px;
-        pointer-events: auto;
-    }
-
-    .move button,
-    .fire-btn {
-        width: 60px;
-        height: 60px;
-        font-size: 22px;
-        border-radius: 50%;
-        border: none;
-        background: rgba(0,0,0,0.6);
-        color: white;
-    }
-}
