@@ -1,0 +1,135 @@
+:root {
+    --primary: #f1c40f;
+    --dark: #2c3e50;
+    --sky: #87CEEB;
+    --soil: #5D4037;
+    --btn-shadow: #c0392b;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    user-select: none; /* Prevent text selection during play */
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #222;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    overflow: hidden;
+}
+
+#game-container {
+    position: relative;
+    width: 800px;
+    height: 600px;
+    box-shadow: 0 0 20px rgba(0,0,0,0.5);
+    background: linear-gradient(to bottom, var(--sky) 15%, var(--soil) 15%);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+canvas {
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+/* UI Layer (HUD) */
+#ui-layer {
+    position: absolute;
+    top: 10px;
+    left: 0;
+    width: 100%;
+    padding: 0 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    pointer-events: none; /* Let clicks pass through to canvas */
+}
+
+.stat-box {
+    background: rgba(0, 0, 0, 0.6);
+    color: #fff;
+    padding: 8px 15px;
+    border-radius: 20px;
+    font-weight: bold;
+    font-size: 18px;
+    border: 2px solid #fff;
+}
+
+.ui-btn {
+    pointer-events: auto;
+    background: #e74c3c;
+    border: none;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    border-radius: 8px;
+    box-shadow: 0 4px 0 #c0392b;
+    transition: transform 0.1s;
+}
+
+.ui-btn:active {
+    transform: translateY(4px);
+    box-shadow: 0 0 0 #c0392b;
+}
+
+.ui-btn.small {
+    padding: 8px 15px;
+    font-size: 16px;
+}
+
+.ui-btn.big {
+    padding: 15px 40px;
+    font-size: 24px;
+    background: #2ecc71;
+    box-shadow: 0 5px 0 #27ae60;
+    margin-top: 20px;
+}
+
+.ui-btn.big:hover {
+    background: #2ebd6d;
+}
+
+/* Overlays (Menu, Game Over, etc) */
+.overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10;
+}
+
+.overlay.hidden {
+    display: none;
+}
+
+.panel {
+    background: #fff;
+    padding: 40px;
+    border-radius: 15px;
+    text-align: center;
+    border: 4px solid var(--dark);
+    max-width: 400px;
+}
+
+h1, h2 {
+    color: var(--dark);
+    margin-bottom: 15px;
+}
+
+p {
+    color: #555;
+    margin-bottom: 10px;
+    font-size: 18px;
+}

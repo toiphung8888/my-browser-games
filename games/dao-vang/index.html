@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JS Gold Miner</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div id="game-container">
+        <canvas id="gameCanvas" width="800" height="600"></canvas>
+
+        <div id="ui-layer">
+            <div class="stat-box">Score: <span id="scoreVal">0</span></div>
+            <div class="stat-box">Target: <span id="targetVal">0</span></div>
+            <div class="stat-box">Time: <span id="timeVal">60</span></div>
+            <div class="stat-box">Level: <span id="levelVal">1</span></div>
+            <button id="btn-pause" class="ui-btn small">⏸</button>
+        </div>
+
+        <div id="menu-overlay" class="overlay">
+            <div class="panel">
+                <h1>GOLD MINER</h1>
+                <p>Aim with the hook. Press <strong>SPACE</strong> or <strong>CLICK</strong> to grab.</p>
+                <p>Collect Gold and Diamonds. Avoid Rocks!</p>
+                <button id="btn-start" class="ui-btn big">▶ START GAME</button>
+            </div>
+        </div>
+
+        <div id="level-overlay" class="overlay hidden">
+            <div class="panel">
+                <h2>LEVEL COMPLETE!</h2>
+                <p>Score: <span id="level-score">0</span></p>
+                <button id="btn-next" class="ui-btn big">Next Level ➡</button>
+            </div>
+        </div>
+
+        <div id="gameover-overlay" class="overlay hidden">
+            <div class="panel">
+                <h2>GAME OVER</h2>
+                <p>You missed the target score.</p>
+                <p>Final Score: <span id="final-score">0</span></p>
+                <button id="btn-restart" class="ui-btn big">🔄 Try Again</button>
+            </div>
+        </div>
+        
+        <div id="pause-overlay" class="overlay hidden">
+            <div class="panel">
+                <h2>PAUSED</h2>
+                <button id="btn-resume" class="ui-btn big">▶ Resume</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
