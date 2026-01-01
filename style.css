@@ -19,26 +19,29 @@ p {
 }
 
 .game-list {
-    display: flex;
-    justify-content: center;
-    margin-top: 40px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 30px;              /* khoảng cách giữa các game */
+    padding: 40px 25px;     /* khoảng cách với mép màn hình */
+    max-width: 1200px;
+    margin: auto;
 }
 
 .game-card {
-    width: 260px;
-    background-color: #1b1b1b;
-    border-radius: 12px;
+    background: white;
+    border-radius: 16px;
     overflow: hidden;
     text-decoration: none;
-    color: white;
-    box-shadow: 0 0 10px rgba(0,0,0,0.6);
-    transition: transform 0.2s, box-shadow 0.2s;
+    color: #222;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .game-card:hover {
-    transform: scale(1.05);
-    box-shadow: 0 0 20px rgba(0,0,0,0.9);
+    transform: translateY(-6px);
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.25);
 }
+
 
 .game-card img {
     width: 100%;
@@ -59,19 +62,11 @@ p {
     }
 
     .game-list {
-        padding: 15px;
-        gap: 15px;
+        gap: 20px;
+        padding: 25px 15px;
     }
 
     .game-card img {
-        height: 140px;
-    }
-
-    .game-card h3 {
-        font-size: 1.1rem;
-    }
-
-    .game-card p {
-        font-size: 0.85rem;
+        height: 150px;
     }
 }
