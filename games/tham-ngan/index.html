@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Neon Survivor</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <canvas id="gameCanvas"></canvas>
+
+    <div id="ui-layer">
+        
+        <div class="hud-top">
+            <div class="bar-container">
+                <div class="bar-label">HP</div>
+                <div class="bar-bg"><div id="hp-bar" class="bar-fill hp-fill"></div></div>
+            </div>
+            <div class="bar-container">
+                <div class="bar-label">LVL <span id="level-display">1</span></div>
+                <div class="bar-bg"><div id="xp-bar" class="bar-fill xp-fill"></div></div>
+            </div>
+            <div class="score-container">Kills: <span id="score-display">0</span></div>
+        </div>
+
+        <div id="start-screen" class="overlay active">
+            <h1>NEON SURVIVOR</h1>
+            <p>PC: W A S D to Move</p>
+            <p>Mobile: Virtual Joystick</p>
+            <p>Auto-Shoot active.</p>
+            <button id="start-btn">START GAME</button>
+        </div>
+
+        <div id="game-over-screen" class="overlay">
+            <h1>YOU DIED</h1>
+            <p>Level Reached: <span id="final-level">0</span></p>
+            <p>Kills: <span id="final-score">0</span></p>
+            <button id="restart-btn">TRY AGAIN</button>
+        </div>
+
+        <button id="pause-btn">||</button>
+    </div>
+
+    <div id="joystick-zone">
+        <div id="joystick-knob"></div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

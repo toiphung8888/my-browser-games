@@ -1,0 +1,176 @@
+:root {
+    --primary: #00f0ff;
+    --danger: #ff004c;
+    --xp: #ffee00;
+    --bg: #111;
+    --hud-bg: rgba(0, 0, 0, 0.5);
+}
+
+* {
+    box-sizing: border-box;
+    touch-action: none; /* Prevent browser zooming/scrolling */
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+body, html {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background-color: var(--bg);
+    font-family: 'Courier New', Courier, monospace;
+    color: white;
+}
+
+canvas {
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+/* UI Layer */
+#ui-layer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none; /* Let clicks pass through to game/joystick */
+}
+
+/* HUD */
+.hud-top {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    right: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.bar-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: bold;
+    text-shadow: 1px 1px 0 #000;
+}
+
+.bar-bg {
+    flex-grow: 1;
+    height: 12px;
+    background: #333;
+    border: 2px solid #fff;
+    border-radius: 4px;
+    overflow: hidden;
+    max-width: 300px;
+}
+
+.bar-fill {
+    height: 100%;
+    width: 100%;
+    transition: width 0.2s;
+}
+
+.hp-fill { background-color: var(--danger); }
+.xp-fill { background-color: var(--xp); width: 0%; }
+
+.score-container {
+    position: absolute;
+    top: 0;
+    right: 0;
+    font-size: 1.2rem;
+    color: white;
+    text-shadow: 0 0 5px var(--primary);
+}
+
+/* Overlays */
+.overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.85);
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    pointer-events: auto;
+    z-index: 10;
+}
+
+.overlay.active { display: flex; }
+
+h1 {
+    font-size: 3rem;
+    color: var(--primary);
+    text-shadow: 0 0 10px var(--primary);
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+p { font-size: 1.2rem; color: #ddd; margin: 5px; }
+
+button {
+    margin-top: 20px;
+    padding: 15px 30px;
+    font-size: 1.5rem;
+    background: var(--primary);
+    border: none;
+    color: #000;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 0 15px var(--primary);
+    border-radius: 5px;
+}
+
+button:active { transform: scale(0.95); }
+
+#pause-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px; /* Adjusted in JS or simply top right */
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    font-size: 1rem;
+    background: rgba(255,255,255,0.2);
+    box-shadow: none;
+    pointer-events: auto;
+    z-index: 5;
+    margin: 0;
+    border: 2px solid white;
+}
+
+/* Virtual Joystick */
+#joystick-zone {
+    position: absolute;
+    bottom: 50px;
+    left: 50px;
+    width: 120px;
+    height: 120px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    pointer-events: auto;
+    display: none; /* Shown via JS on touch */
+}
+
+#joystick-knob {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 50px;
+    height: 50px;
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    box-shadow: 0 0 10px white;
+}
+
+@media (pointer: coarse) {
+    #joystick-zone { display: block; }
+}
