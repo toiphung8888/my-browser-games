@@ -624,8 +624,4 @@ document.addEventListener('DOMContentLoaded', () => {
 
 });
 
-document.getElementById("up").addEventListener("touchstart", moveUp);
-document.getElementById("down").addEventListener("touchstart", moveDown);
-document.getElementById("left").addEventListener("touchstart", moveLeft);
-document.getElementById("right").addEventListener("touchstart", moveRight);
-document.getElementById("fire").addEventListener("touchstart", shoot);
+
