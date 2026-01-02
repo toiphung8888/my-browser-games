@@ -1,0 +1,68 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;800&display=swap');
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    background: radial-gradient(ellipse at bottom, #1b2735 0%, #090a0f 100%);
+    height: 100vh;
+    overflow: hidden;
+    font-family: 'Montserrat', sans-serif;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Hiệu ứng nền sóng biển */
+.ocean { 
+    height: 5%; width: 100%; position: absolute; bottom: 0; left: 0; background: #015871; z-index: -1;
+}
+.wave {
+    background: url(https://s3-us-west-2.amazonaws.com/s.cdpn.io/85486/wave.svg) repeat-x; 
+    position: absolute; top: -198px; width: 6400px; height: 198px; animation: wave 7s cubic-bezier( 0.36, 0.45, 0.63, 0.53) infinite; transform: translate3d(0, 0, 0);
+}
+.wave:nth-of-type(2) { top: -175px; animation: wave 7s cubic-bezier( 0.36, 0.45, 0.63, 0.53) -.125s infinite, swell 7s ease -1.25s infinite; opacity: 1; }
+@keyframes wave { 0% { margin-left: 0; } 100% { margin-left: -1600px; } }
+@keyframes swell { 0%, 100% { transform: translate3d(0,-25px,0); } 50% { transform: translate3d(0,5px,0); } }
+
+.container { text-align: center; z-index: 10; }
+
+.main-title {
+    font-size: 3.5rem; letter-spacing: 5px; text-shadow: 0 0 20px rgba(0,168,255,0.8);
+    margin-bottom: 10px; background: linear-gradient(to right, #00f260, #0575e6);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+}
+.subtitle { color: #aaa; margin-bottom: 50px; font-size: 1.2rem; letter-spacing: 2px; }
+
+.card-container { display: flex; gap: 40px; justify-content: center; }
+
+.card {
+    background: rgba(255,255,255,0.05); width: 300px; height: 400px;
+    border-radius: 20px; border: 1px solid rgba(255,255,255,0.1);
+    backdrop-filter: blur(10px); cursor: pointer; transition: 0.4s;
+    position: relative; overflow: hidden;
+}
+
+.card:hover { transform: translateY(-20px); box-shadow: 0 20px 40px rgba(0,0,0,0.5); border-color: #00a8ff; }
+.card.premium:hover { border-color: gold; box-shadow: 0 20px 40px rgba(255, 215, 0, 0.3); }
+
+.card-content { padding: 30px; display: flex; flex-direction: column; height: 100%; justify-content: space-between; }
+
+.card h2 { font-size: 2rem; margin-bottom: 10px; }
+.card.premium h2 { color: gold; }
+
+.card ul { list-style: none; text-align: left; margin: 20px 0; color: #ddd; }
+.card ul li { padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.1); }
+
+.card button {
+    width: 100%; padding: 15px; border: none; border-radius: 50px;
+    font-weight: bold; cursor: pointer; background: #eee; color: #333; transition: 0.3s;
+}
+.card:hover button { background: #00a8ff; color: white; }
+.card.premium:hover button { background: gold; color: black; }
+
+#sound-control {
+    margin-top: 50px; cursor: pointer; opacity: 0.7; transition: 0.3s; border: 1px solid #555;
+    display: inline-block; padding: 10px 20px; border-radius: 30px;
+}
+#sound-control:hover { opacity: 1; border-color: white; background: rgba(255,255,255,0.1); }

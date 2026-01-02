@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pro Fishing Simulator - FPS Edition</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <a href="../index.html" class="btn-home">🏠 MENU CHÍNH</a>
+    <canvas id="gameCanvas"></canvas>
+
+    <div id="ui-layer">
+        
+        <div id="start-screen" class="panel active">
+            <h1>PRO FISHING SIMULATOR</h1>
+            <p>Góc nhìn thứ nhất - Vật lý chân thực</p>
+            <button id="btn-start">BẮT ĐẦU CÂU</button>
+        </div>
+
+        <div id="bait-screen" class="panel">
+            <h2>CHỌN LOẠI MỒI</h2>
+            <div class="bait-container">
+                <div class="bait-item" data-bait="worm">
+                    <div class="icon">🪱</div>
+                    <span>Giun Đất (Dễ)</span>
+                    <small>Cá nhỏ, dễ bắt</small>
+                </div>
+                <div class="bait-item" data-bait="shrimp">
+                    <div class="icon">🦐</div>
+                    <span>Tôm Tươi (Vừa)</span>
+                    <small>Cá vừa, phao nhạy</small>
+                </div>
+                <div class="bait-item" data-bait="lure">
+                    <div class="icon">🐟</div>
+                    <span>Mồi Giả (Khó)</span>
+                    <small>Săn cá KHỦNG</small>
+                </div>
+            </div>
+        </div>
+
+        <div id="hud" class="hidden">
+            <div class="status-box">
+                <span id="bait-display">Mồi: Không</span>
+                <span id="score-display">Giỏ cá: 0</span>
+            </div>
+            
+            <div id="instruction">Nhấn chuột trái để quăng cần</div>
+
+            <div id="tension-container">
+                <div class="bar-label">LỰC CĂNG DÂY (SPACE)</div>
+                <div class="tension-bar-bg">
+                    <div id="tension-fill" style="width: 0%;"></div>
+                    <div id="safe-zone"></div>
+                </div>
+                <div class="warning-text" id="warning-msg">CẨN THẬN ĐỨT DÂY!</div>
+            </div>
+
+             <div id="fish-distance-container">
+                <div class="bar-label">KHOẢNG CÁCH CÁ</div>
+                <div class="distance-bar-bg">
+                    <div id="distance-fill" style="width: 100%;"></div>
+                </div>
+            </div>
+        </div>
+
+        <div id="result-screen" class="panel">
+            <h2 id="result-title">CÁ CẮN CÂU!</h2>
+            <div id="fish-info">
+                <div id="fish-icon">🐟</div>
+                <h3 id="fish-name">Cá Chép</h3>
+                <p id="fish-weight">2.5 kg</p>
+            </div>
+            <p id="fail-message" class="hidden"></p>
+            
+            <div class="actions">
+                <button id="btn-keep" class="btn-success">BỎ GIỎ</button>
+                <button id="btn-release" class="btn-secondary">THẢ CÁ</button>
+                <button id="btn-retry" class="btn-warning hidden">THỬ LẠI</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

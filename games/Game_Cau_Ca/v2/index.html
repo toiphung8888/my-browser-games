@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pro Fishing Simulator V2 - Economy Edition</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <a href="../index.html" class="btn-home">🏠 MENU CHÍNH</a>
+    <canvas id="gameCanvas"></canvas>
+
+    <div id="ui-layer">
+        <div id="coin-display-global" class="coin-badge">
+            🪙 <span id="user-coins">0</span>
+        </div>
+
+        <div id="start-screen" class="panel active">
+            <h1>PRO FISHING V2</h1>
+            <p>Săn cá khủng - Kiếm tiền tỷ</p>
+            <p style="color: yellow; font-size: 14px;">(Đã thêm: Shop mồi, Đảo dừa & Tàu thuyền)</p>
+            <button id="btn-start">VÀO GAME</button>
+        </div>
+
+        <div id="bait-screen" class="panel">
+            <h2>CỬA HÀNG MỒI CÂU</h2>
+            <p class="sub-text">Chọn mồi để bắt đầu câu (Mỗi lần câu tốn 1 mồi)</p>
+            <div class="bait-container">
+                </div>
+        </div>
+
+        <div id="hud" class="hidden">
+            <div class="status-box">
+                <span id="bait-display">Mồi: Không</span>
+                <span id="session-score">Giỏ cá: 0</span>
+            </div>
+            
+            <div id="instruction">Nhấn chuột trái để quăng cần</div>
+
+            <div id="tension-container">
+                <div class="bar-label">LỰC KÉO (SPACE)</div>
+                <div class="tension-bar-bg">
+                    <div id="tension-fill" style="width: 0%;"></div>
+                    <div id="safe-zone"></div>
+                </div>
+                <div class="warning-text" id="warning-msg">CẨN THẬN ĐỨT DÂY!</div>
+            </div>
+
+             <div id="fish-distance-container">
+                <div class="bar-label">KHOẢNG CÁCH</div>
+                <div class="distance-bar-bg">
+                    <div id="distance-fill" style="width: 100%;"></div>
+                </div>
+            </div>
+        </div>
+
+        <div id="result-screen" class="panel">
+            <h2 id="result-title">CÁ CẮN CÂU!</h2>
+            <div id="fish-info">
+                <div id="fish-icon">🐟</div>
+                <h3 id="fish-name">Cá Chép</h3>
+                <p id="fish-stats">2.5 kg - Giá: 50 xu</p>
+            </div>
+            <p id="reward-msg" class="reward-anim">+0 Xu</p>
+            <p id="fail-message" class="hidden"></p>
+            
+            <div class="actions">
+                <button id="btn-continue" class="btn-success">BÁN & CÂU TIẾP</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fishing Simulator - Game Launcher</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="ocean">
+        <div class="wave"></div>
+        <div class="wave"></div>
+    </div>
+
+    <div class="container">
+        <h1 class="main-title">FISHING SIMULATOR<br>COLLECTION</h1>
+        <p class="subtitle">Chọn phiên bản để bắt đầu</p>
+
+        <div class="card-container">
+            <div class="card" onclick="startGame('v1')" onmouseenter="playHover()">
+                <div class="card-content">
+                    <h2>VERSION 1.0</h2>
+                    <p>Phiên bản cổ điển</p>
+                    <ul>
+                        <li>🎣 Cơ chế gốc</li>
+                        <li>🧘 Thư giãn</li>
+                        <li>❌ Không có tiền tệ</li>
+                    </ul>
+                    <button>CHƠI NGAY</button>
+                </div>
+            </div>
+
+            <div class="card premium" onclick="startGame('v2')" onmouseenter="playHover()">
+                <div class="card-content">
+                    <h2>VERSION 2.0</h2>
+                    <p>Economy Update</p>
+                    <ul>
+                        <li>💰 Hệ thống Shop & Tiền</li>
+                        <li>🦈 Cá Mập & Tàu thuyền</li>
+                        <li>🌴 Đảo nhiệt đới</li>
+                    </ul>
+                    <button>CHƠI NGAY</button>
+                </div>
+            </div>
+
+            
+        </div>
+        
+        <div id="sound-control" onclick="toggleMusic()">
+            🔊 Bật Nhạc Nền
+        </div>
+    </div>
+
+    <script src="launcher.js"></script>
+</body>
+</html>
