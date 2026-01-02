@@ -1,60 +1,76 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="vi">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, orientation=landscape">
-    <title>WebMOBA: Legends of Code</title>
+    <title>MOBA Engine V2: Hardcore</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <canvas id="gameCanvas"></canvas>
 
     <div id="ui-layer">
-        <div class="top-bar">
-            <div class="stat-box">
-                <div class="bar-container"><div id="hud-hp-bar" class="bar hp"></div></div>
-                <div class="bar-container"><div id="hud-mana-bar" class="bar mana"></div></div>
+        <div class="top-panel">
+            <div class="hero-stats">
+                <div class="stat-row">
+                    <span class="stat-label">HP</span>
+                    <div class="bar-bg"><div id="hud-hp" class="bar-fill hp-fill"></div></div>
+                    <span id="text-hp" class="stat-text">1000/1000</span>
+                </div>
+                <div class="stat-row">
+                    <span class="stat-label">MP</span>
+                    <div class="bar-bg"><div id="hud-mp" class="bar-fill mp-fill"></div></div>
+                    <span id="text-mp" class="stat-text">500/500</span>
+                </div>
             </div>
-            <div class="score-box">
-                <span id="score-display">K/D: 0/0</span>
-                <span id="time-display">00:00</span>
+            <div class="game-info">
+                <div id="kda">K/D/A: 0/0/0</div>
+                <div id="game-time">00:00</div>
+                <div id="fps" style="color: #0f0; font-size: 10px;">60 FPS</div>
             </div>
-            <div class="fps-counter" id="fps-display">60 FPS</div>
         </div>
 
-        <div class="controls-container">
+        <div class="controls-area">
             <div id="joystick-zone">
+                <div class="joystick-guide">DI CHUYỂN</div>
                 <div id="joystick-base">
                     <div id="joystick-stick"></div>
                 </div>
             </div>
 
-            <div class="combat-buttons">
-                <div class="btn-wrapper">
-                    <button id="btn-s1" class="skill-btn" data-key="1">1</button>
-                    <svg class="cooldown-overlay"><circle r="28" cx="30" cy="30"></circle></svg>
-                    <span class="cd-text"></span>
+            <div class="skill-cluster">
+                <div class="skill-btn-wrapper s1-pos">
+                    <button id="btn-s1" class="skill-btn" data-key="1">Q</button>
+                    <svg class="cd-svg"><circle class="cd-circle" r="28" cx="30" cy="30"></circle></svg>
+                    <div class="cd-number"></div>
                 </div>
-                
-                <div class="btn-wrapper">
-                    <button id="btn-s2" class="skill-btn" data-key="2">2</button>
-                    <svg class="cooldown-overlay"><circle r="28" cx="30" cy="30"></circle></svg>
-                    <span class="cd-text"></span>
+                <div class="skill-btn-wrapper s2-pos">
+                    <button id="btn-s2" class="skill-btn" data-key="2">W</button>
+                    <svg class="cd-svg"><circle class="cd-circle" r="28" cx="30" cy="30"></circle></svg>
+                    <div class="cd-number"></div>
                 </div>
-
-                <div class="btn-wrapper">
-                    <button id="btn-ult" class="skill-btn ult" data-key="3">Ult</button>
-                    <svg class="cooldown-overlay"><circle r="33" cx="35" cy="35"></circle></svg>
-                    <span class="cd-text"></span>
+                <div class="skill-btn-wrapper ult-pos">
+                    <button id="btn-ult" class="skill-btn ult" data-key="3">R</button>
+                    <svg class="cd-svg"><circle class="cd-circle" r="33" cx="35" cy="35"></circle></svg>
+                    <div class="cd-number"></div>
                 </div>
-
-                <div class="btn-wrapper attack-wrapper">
-                    <button id="btn-attack" class="attack-btn">⚔️</button>
+                <div class="skill-btn-wrapper atk-pos">
+                    <button id="btn-atk" class="atk-btn">⚔️</button>
                 </div>
             </div>
         </div>
+
+        <div id="start-screen">
+            <h1>WEB MOBA ENGINE V2</h1>
+            <p>Phiên bản tối ưu hóa Canvas</p>
+            <button id="start-btn">CHẠM ĐỂ BẮT ĐẦU</button>
+            <p id="debug-log" style="font-size: 10px; color: #888; margin-top: 20px;">System Ready...</p>
+        </div>
         
-        <div id="game-message">TAP TO START</div>
+        <div id="death-screen" style="display: none;">
+            <h2>BẠN ĐÃ BỊ HẠ GỤC</h2>
+            <p>Hồi sinh trong: <span id="respawn-timer">5</span>s</p>
+        </div>
     </div>
 
     <script src="script.js"></script>
