@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Desert Citadel Defense</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Black+Ops+One&family=Roboto:wght@700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <div id="game-ui">
+        <div class="top-bar">
+            <div class="stat-box health">❤️ <span id="lives">20</span></div>
+            <div class="stat-box gold">💎 <span id="gold">400</span></div>
+            <div class="stat-box wave">WAVE <span id="wave">1</span></div>
+        </div>
+
+        <canvas id="gameCanvas" width="960" height="640"></canvas>
+
+        <div class="controls">
+            <div class="tower-btn" onclick="setMode('archer')" id="btn-archer">
+                <div class="t-icon">🏹</div>
+                <div class="t-info">
+                    <div>Cung Thủ</div>
+                    <div class="cost">70💎</div>
+                </div>
+            </div>
+            <div class="tower-btn" onclick="setMode('cannon')" id="btn-cannon">
+                <div class="t-icon">💣</div>
+                <div class="t-info">
+                    <div>Pháo Cối</div>
+                    <div class="cost">120💎</div>
+                </div>
+            </div>
+            <div class="tower-btn" onclick="setMode('laser')" id="btn-laser">
+                <div class="t-icon">⚡</div>
+                <div class="t-info">
+                    <div>Tháp Laser</div>
+                    <div class="cost">180💎</div>
+                </div>
+            </div>
+            <div class="tower-btn skill" onclick="triggerSkill()">
+                <div class="t-icon">☄️</div>
+                <div class="t-info">
+                    <div>Nuke (Q)</div>
+                    <div class="cost" id="skill-timer">Sẵn sàng</div>
+                </div>
+            </div>
+        </div>
+        
+        <div id="start-overlay">
+            <h1>DESERT CITADEL</h1>
+            <p>Bảo vệ thành trì cuối cùng khỏi quân đoàn quái vật!</p>
+            <p style="font-size: 14px; color: #ccc;">(Click để bắt đầu và bật âm thanh)</p>
+            <button onclick="initGame()">VÀO TRẬN</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
