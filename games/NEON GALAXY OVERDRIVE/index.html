@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Neon Galaxy: Overdrive</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <div id="ui-layer">
+        <div id="score-board">SCORE: <span id="score-val">0</span></div>
+        <div id="health-bar">
+            <div id="health-fill"></div>
+        </div>
+        
+        <div id="start-screen">
+            <h1 class="glitch" data-text="NEON GALAXY">NEON GALAXY</h1>
+            <p>Di chuột để di chuyển - Giữ chuột trái để bắn tốc độ cao</p>
+            <button id="start-btn">KHỞI ĐỘNG HỆ THỐNG</button>
+        </div>
+
+        <div id="game-over-screen" class="hidden">
+            <h1>MISSION FAILED</h1>
+            <p>Điểm số cuối cùng: <span id="final-score">0</span></p>
+            <button id="restart-btn">THỬ LẠI</button>
+        </div>
+    </div>
+
+    <canvas id="gameCanvas"></canvas>
+
+    <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,116 @@
+/* style.css */
+body {
+    margin: 0;
+    overflow: hidden;
+    background-color: #050505;
+    font-family: 'Orbitron', sans-serif;
+    color: white;
+}
+
+canvas {
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1;
+}
+
+#ui-layer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 10;
+    pointer-events: none; /* Để chuột đi xuyên qua UI vào game */
+}
+
+/* Cho phép bấm vào nút */
+#start-screen, #game-over-screen {
+    pointer-events: auto;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    background: rgba(0, 0, 0, 0.85);
+    padding: 40px;
+    border: 2px solid #00f3ff;
+    box-shadow: 0 0 20px #00f3ff;
+    border-radius: 10px;
+}
+
+.hidden {
+    display: none !important;
+}
+
+h1 {
+    font-size: 60px;
+    margin: 0 0 20px 0;
+    color: #fff;
+    text-shadow: 2px 2px 0px #ff00de, -2px -2px 0px #00f3ff;
+    letter-spacing: 4px;
+}
+
+p {
+    font-size: 18px;
+    color: #ccc;
+    margin-bottom: 30px;
+}
+
+button {
+    background: transparent;
+    color: #00f3ff;
+    border: 2px solid #00f3ff;
+    padding: 15px 40px;
+    font-size: 24px;
+    font-family: 'Orbitron', sans-serif;
+    cursor: pointer;
+    transition: 0.3s;
+    text-transform: uppercase;
+    font-weight: bold;
+    box-shadow: 0 0 10px #00f3ff;
+}
+
+button:hover {
+    background: #00f3ff;
+    color: #000;
+    box-shadow: 0 0 30px #00f3ff;
+}
+
+#score-board {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    font-size: 24px;
+    text-shadow: 0 0 5px #fff;
+}
+
+#health-bar {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    width: 200px;
+    height: 20px;
+    border: 2px solid #ff0055;
+    border-radius: 4px;
+}
+
+#health-fill {
+    width: 100%;
+    height: 100%;
+    background-color: #ff0055;
+    box-shadow: 0 0 10px #ff0055;
+    transition: width 0.2s;
+}
+
+/* Hiệu ứng Glitch nhẹ cho text */
+.glitch {
+    animation: glitch 1s linear infinite;
+}
+
+@keyframes glitch {
+    2%, 64% { transform: translate(2px,0) skew(0deg); }
+    4%, 60% { transform: translate(-2px,0) skew(0deg); }
+    62% { transform: translate(0,0) skew(5deg); }
+}
