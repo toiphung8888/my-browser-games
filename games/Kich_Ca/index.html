@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Game Kích Cá Giả Lập - Kịch Tính</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="ui-layer">
+        <div id="crosshair">+</div>
+        <div id="info-panel">
+            <div id="score">Cá trong balo: 0</div>
+            <div id="battery">Pin ắc quy: 100%</div>
+            <div id="status-msg"></div>
+            <div id="controls">
+                WASD: Di chuyển | Chuột: Nhìn<br>
+                Chuột Phải: KÍCH ĐIỆN | Chuột Trái: VỚT CÁ
+            </div>
+        </div>
+        
+        <div id="blocker">
+            <div id="instructions">
+                <h1>GIẢ LẬP KÍCH CÁ MIỀN TÂY</h1>
+                <p>Cẩn thận bảo vệ đi tuần!</p>
+                <p>Click chuột để bắt đầu</p>
+            </div>
+        </div>
+
+        <div id="game-over">
+            <h1>BỊ BẮT RỒI!</h1>
+            <p>Bảo vệ đã tóm được bạn.</p>
+            <button onclick="location.reload()">Chơi lại</button>
+        </div>
+
+        <div id="flash-overlay"></div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/PointerLockControls.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/simplex-noise/2.4.0/simplex-noise.min.js"></script>
+    
+    <script src="game.js"></script>
+</body>
+</html>
