@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, orientation=landscape">
+    <title>WebMOBA: Legends of Code</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <canvas id="gameCanvas"></canvas>
+
+    <div id="ui-layer">
+        <div class="top-bar">
+            <div class="stat-box">
+                <div class="bar-container"><div id="hud-hp-bar" class="bar hp"></div></div>
+                <div class="bar-container"><div id="hud-mana-bar" class="bar mana"></div></div>
+            </div>
+            <div class="score-box">
+                <span id="score-display">K/D: 0/0</span>
+                <span id="time-display">00:00</span>
+            </div>
+            <div class="fps-counter" id="fps-display">60 FPS</div>
+        </div>
+
+        <div class="controls-container">
+            <div id="joystick-zone">
+                <div id="joystick-base">
+                    <div id="joystick-stick"></div>
+                </div>
+            </div>
+
+            <div class="combat-buttons">
+                <div class="btn-wrapper">
+                    <button id="btn-s1" class="skill-btn" data-key="1">1</button>
+                    <svg class="cooldown-overlay"><circle r="28" cx="30" cy="30"></circle></svg>
+                    <span class="cd-text"></span>
+                </div>
+                
+                <div class="btn-wrapper">
+                    <button id="btn-s2" class="skill-btn" data-key="2">2</button>
+                    <svg class="cooldown-overlay"><circle r="28" cx="30" cy="30"></circle></svg>
+                    <span class="cd-text"></span>
+                </div>
+
+                <div class="btn-wrapper">
+                    <button id="btn-ult" class="skill-btn ult" data-key="3">Ult</button>
+                    <svg class="cooldown-overlay"><circle r="33" cx="35" cy="35"></circle></svg>
+                    <span class="cd-text"></span>
+                </div>
+
+                <div class="btn-wrapper attack-wrapper">
+                    <button id="btn-attack" class="attack-btn">⚔️</button>
+                </div>
+            </div>
+        </div>
+        
+        <div id="game-message">TAP TO START</div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
