@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Neon UFO: Rival Invasion</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div id="ui-layer">
+        <div id="radar-wrap"><canvas id="radar" width="160" height="160"></canvas><div class="radar-scan"></div></div>
+        <div class="hud-top-right">
+            <div class="hud-row text-neon">CẤP ĐỘ: <span id="ui-lvl" style="color:#ffcc00; font-size:1.4em">1</span></div>
+            <div class="hud-row"><div class="bar-container"><div class="bar-fill" id="hp-bar" style="width: 100%"></div></div></div>
+            <div class="hud-row"><div class="bar-container xp-container"><div class="bar-fill" id="xp-bar" style="width: 0%"></div></div></div>
+            <div class="hud-row text-neon" style="font-size: 12px;">ĐIỂM: <span id="ui-score">0</span></div>
+            <div class="hud-row text-neon" style="font-size: 12px;">KHO BÁU: <span id="ui-treasure">0</span></div>
+        </div>
+        <div id="center-msg">LEVEL UP!</div>
+        <div id="boss-warning">CẢNH BÁO: KẺ ĐỊCH XUẤT HIỆN!</div>
+        <div id="freeze-fx"></div>
+        <div id="joystick-zone"></div>
+        <div class="arc-menu">
+            <div class="skill-btn-wrap pos-4"><div class="skill-btn locked" id="btn-s4"><div class="skill-icon">⚫</div><div class="skill-cd" id="cd-s4"></div></div><div class="skill-desc">HỐ ĐEN</div></div>
+            <div class="skill-btn-wrap pos-3"><div class="skill-btn locked" id="btn-s3"><div class="skill-icon">⚡</div><div class="skill-cd" id="cd-s3"></div></div><div class="skill-desc">LASER</div></div>
+            <div class="skill-btn-wrap pos-2"><div class="skill-btn locked" id="btn-s2"><div class="skill-icon">🛡️</div><div class="skill-cd" id="cd-s2"></div></div><div class="skill-desc">KHIÊN</div></div>
+            <div class="skill-btn-wrap pos-1"><div class="skill-btn locked" id="btn-s1"><div class="skill-icon">🚀</div><div class="skill-cd" id="cd-s1"></div></div><div class="skill-desc">LƯỚT</div></div>
+        </div>
+    </div>
+    <div id="menu-start" class="menu-screen">
+        <h1>NEON UFO<br>RIVAL</h1>
+        <p>
+            VŨ TRỤ VÔ TẬN - KHO BÁU VÔ TẬN.<br>
+            Cứ mỗi Kho Báu bị phá hủy, một <b>Thủ Lĩnh (Rival)</b> sẽ xuất hiện báo thù.<br>
+            Nó biết phân thân và triệu hồi quái vật!
+        </p>
+        <button id="btn-start">THAM CHIẾN</button>
+    </div>
+    <div id="menu-over" class="menu-screen hidden">
+        <h1 style="color: #ff3366">THẤT BẠI</h1>
+        <div class="stats-box"><p>ĐIỂM: <span id="end-score" style="color:#fff">0</span></p><p>KHO BÁU: <span id="end-treasure" style="color:#fff">0</span></p></div>
+        <button id="btn-restart">CHƠI LẠI</button>
+    </div>
+    <canvas id="gameCanvas"></canvas>
+    <script src="game.js"></script>
+</body>
+</html>
