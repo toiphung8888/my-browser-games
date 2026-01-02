@@ -1,0 +1,206 @@
+:root {
+    --hp-color: #2ecc71;
+    --mana-color: #3498db;
+    --enemy-hp: #e74c3c;
+    --btn-bg: rgba(0, 0, 0, 0.5);
+    --btn-border: rgba(255, 255, 255, 0.3);
+}
+
+body, html {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background-color: #1a1a1a;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    touch-action: none; /* Disables browser gestures */
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+#gameCanvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+}
+
+#ui-layer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 10;
+    pointer-events: none; /* Let touches pass through to specific elements */
+}
+
+/* Top Stats */
+.top-bar {
+    position: absolute;
+    top: 10px;
+    left: 20px;
+    right: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.stat-box {
+    width: 200px;
+}
+
+.bar-container {
+    width: 100%;
+    height: 10px;
+    background: #444;
+    margin-bottom: 4px;
+    border: 1px solid #000;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.bar { height: 100%; width: 100%; transition: width 0.1s linear; }
+.hp { background-color: var(--hp-color); }
+.mana { background-color: var(--mana-color); }
+
+.score-box {
+    color: white;
+    font-weight: bold;
+    text-shadow: 1px 1px 2px black;
+    font-size: 18px;
+    text-align: center;
+}
+
+.fps-counter { color: lime; font-size: 12px; }
+
+/* Controls */
+.controls-container {
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    right: 20px;
+    height: 150px;
+    display: flex;
+    justify-content: space-between;
+    pointer-events: none;
+}
+
+/* Joystick */
+#joystick-zone {
+    width: 150px;
+    height: 150px;
+    position: relative;
+    pointer-events: auto; /* Catch touches */
+}
+
+#joystick-base {
+    width: 100px;
+    height: 100px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    position: absolute;
+    top: 25px;
+    left: 25px;
+    display: none; /* Hidden until touch */
+}
+
+#joystick-stick {
+    width: 40px;
+    height: 40px;
+    background: rgba(255, 255, 255, 0.5);
+    border-radius: 50%;
+    position: absolute;
+    top: 30px;
+    left: 30px;
+    transform: translate(0, 0);
+}
+
+/* Combat Buttons */
+.combat-buttons {
+    display: grid;
+    grid-template-columns: repeat(3, 70px);
+    grid-template-rows: 70px 80px;
+    gap: 10px;
+    pointer-events: auto;
+    align-items: center;
+    justify-items: center;
+}
+
+/* Grid Layout for MOBA Style Arc */
+.combat-buttons .btn-wrapper:nth-child(1) { grid-column: 1; grid-row: 2; margin-top: -20px;} /* S1 */
+.combat-buttons .btn-wrapper:nth-child(2) { grid-column: 2; grid-row: 1; margin-top: 20px;} /* S2 */
+.combat-buttons .btn-wrapper:nth-child(3) { grid-column: 1; grid-row: 1; transform: scale(0.9); } /* Ult */
+.combat-buttons .attack-wrapper { grid-column: 3; grid-row: 2; }
+
+.btn-wrapper {
+    position: relative;
+    width: 60px;
+    height: 60px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.skill-btn, .attack-btn {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    border: 2px solid var(--btn-border);
+    background: var(--btn-bg);
+    color: white;
+    font-weight: bold;
+    font-size: 14px;
+    outline: none;
+    touch-action: manipulation;
+}
+
+.attack-btn {
+    width: 80px;
+    height: 80px;
+    background: rgba(231, 76, 60, 0.6);
+    font-size: 30px;
+    border: 3px solid rgba(255, 255, 255, 0.5);
+}
+
+.skill-btn:active, .attack-btn:active { transform: scale(0.95); background: rgba(255, 255, 255, 0.3); }
+.skill-btn.disabled { filter: grayscale(1); opacity: 0.5; }
+
+/* Cooldown Overlay */
+.cooldown-overlay {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    transform: rotate(-90deg);
+    pointer-events: none;
+}
+.cooldown-overlay circle {
+    fill: none;
+    stroke: rgba(0,0,0,0.7);
+    stroke-width: 60; /* Fills the circle */
+    stroke-dasharray: 200; /* Approximate circumference */
+    stroke-dashoffset: 200; /* Start hidden */
+}
+.cd-text {
+    position: absolute;
+    color: white;
+    font-size: 18px;
+    font-weight: bold;
+    text-shadow: 1px 1px 2px black;
+}
+
+#game-message {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+    font-size: 40px;
+    font-weight: 900;
+    text-shadow: 0 0 10px black;
+    pointer-events: auto;
+    cursor: pointer;
+}
