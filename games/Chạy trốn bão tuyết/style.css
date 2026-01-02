@@ -1,0 +1,165 @@
+:root {
+    --ice-blue: #a8d5e5;
+    --deep-blue: #1c2b36;
+    --danger: #ff4444;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    user-select: none;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    overflow: hidden;
+    background-color: var(--deep-blue);
+    width: 100vw;
+    height: 100vh;
+}
+
+#game-canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+}
+
+#ui-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 10;
+    pointer-events: none; /* Để chuột click xuyên qua vào game nếu cần */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Các màn hình UI chung */
+#start-screen, #game-over-screen {
+    background: rgba(12, 20, 30, 0.85);
+    padding: 40px 60px;
+    border-radius: 15px;
+    text-align: center;
+    color: white;
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--ice-blue);
+    box-shadow: 0 0 30px rgba(168, 213, 229, 0.2);
+    pointer-events: auto;
+    transition: opacity 0.3s;
+}
+
+h1, h2 {
+    font-size: 3rem;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+    letter-spacing: 5px;
+    color: var(--ice-blue);
+    text-shadow: 0 0 10px var(--ice-blue);
+}
+
+p {
+    color: #ccc;
+    margin-bottom: 30px;
+    font-size: 1.1rem;
+}
+
+.instructions {
+    margin: 20px 0;
+    font-size: 0.9rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
+
+.key {
+    background: #fff;
+    color: #333;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-weight: bold;
+    box-shadow: 0 2px 0 #999;
+}
+
+button {
+    background: transparent;
+    border: 2px solid var(--ice-blue);
+    color: var(--ice-blue);
+    padding: 15px 40px;
+    font-size: 1.2rem;
+    cursor: pointer;
+    text-transform: uppercase;
+    font-weight: bold;
+    transition: all 0.2s;
+    letter-spacing: 2px;
+}
+
+button:hover {
+    background: var(--ice-blue);
+    color: var(--deep-blue);
+    box-shadow: 0 0 20px var(--ice-blue);
+}
+
+/* UI trong game */
+#game-ui {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+}
+
+#score-board, #speed-meter {
+    position: absolute;
+    color: white;
+    font-weight: bold;
+    text-shadow: 2px 2px 0 #000;
+}
+
+#score-board {
+    top: 20px;
+    left: 30px;
+    font-size: 2rem;
+}
+
+#speed-meter {
+    bottom: 30px;
+    right: 30px;
+    font-size: 1.5rem;
+    font-family: monospace;
+}
+
+/* Hiệu ứng trúng đòn */
+#health-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle, transparent 50%, rgba(255, 0, 0, 0.4) 100%);
+    opacity: 0;
+    transition: opacity 0.1s;
+}
+
+.hidden {
+    display: none !important;
+}
+
+/* Animation nhẹ cho logo */
+@keyframes float {
+    0% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+    100% { transform: translateY(0px); }
+}
+
+#start-screen h1 {
+    animation: float 3s ease-in-out infinite;
+}

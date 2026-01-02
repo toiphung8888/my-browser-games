@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Avalanche Run: First Person Survival</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    </head>
+<body>
+
+    <div id="ui-container">
+        <div id="start-screen">
+            <h1>AVALANCHE RUN</h1>
+            <p>Góc nhìn thứ nhất - Sinh tồn bão tuyết</p>
+            <div class="instructions">
+                <div class="key">A</div> / <div class="key">D</div> hoặc <div class="key">←</div> / <div class="key">→</div> để né
+            </div>
+            <button id="start-btn">BẮT ĐẦU CHẠY</button>
+        </div>
+
+        <div id="game-ui" class="hidden">
+            <div id="score-board">Điểm: <span id="score">0</span>m</div>
+            <div id="speed-meter">Tốc độ: <span id="speed">0</span> km/h</div>
+            <div id="health-overlay"></div> </div>
+
+        <div id="game-over-screen" class="hidden">
+            <h2>THẤT BẠI!</h2>
+            <p>Bạn đã bị vùi lấp dưới tuyết.</p>
+            <p class="final-score">Quãng đường: <span id="final-score-val">0</span>m</p>
+            <button id="restart-btn">CHẠY LẠI</button>
+        </div>
+    </div>
+
+    <canvas id="game-canvas"></canvas>
+
+    <script src="script.js"></script>
+</body>
+</html>
