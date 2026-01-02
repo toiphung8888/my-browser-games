@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Săn Chuột Đồng: Final Fix</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="blocker">
+        <div id="instructions">
+            <h1>SĂN CHUỘT ĐỒNG QUÊ</h1>
+            <p style="color: #aaa;">(Vui lòng bật loa để nghe tiếng lúa xào xạc)</p>
+            <p><strong>Click chuột để BẮT ĐẦU</strong></p>
+            <div class="controls-guide">
+                <p>🏃 Di chuyển: <b>W, A, S, D</b></p>
+                <p>🚶 Chạy (Chậm): Giữ <b>SHIFT</b></p>
+                <p>🎒 Kho đồ: <b>E</b></p>
+                <p>🖱️ Hành động: <b>Chuột Trái</b></p>
+            </div>
+        </div>
+    </div>
+
+    <div id="ui-container">
+        <div id="stamina-container">
+            <span>⚡ Sức:</span>
+            <div id="stamina-bar-bg"><div id="stamina-bar"></div></div>
+        </div>
+
+        <div id="crosshair"></div>
+        <div id="inventory-btn">🎒 Túi (E)</div>
+        <div id="notification"></div>
+
+        <div id="inventory-panel" class="hidden">
+            <h3>Túi Đồ Nghề</h3>
+            <div class="grid-container" id="inventory-grid"></div>
+            <div id="current-item-display">Trên tay: <span id="hand-item" style="color: #ffd700;">Tay không</span></div>
+        </div>
+
+        <div id="stats">
+            <div>🐀 Chuột: <span id="score">0</span></div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/PointerLockControls.js"></script>
+    <script src="game.js"></script>
+</body>
+</html>
