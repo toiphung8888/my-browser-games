@@ -1,0 +1,49 @@
+@import url('https://fonts.googleapis.com/css2?family=Black+Ops+One&family=Roboto+Mono:wght@500&display=swap');
+
+body { margin: 0; overflow: hidden; background: #000; font-family: 'Roboto Mono', monospace; user-select: none; }
+
+/* HIỆU ỨNG MÁU (KHI BỊ ĐÁNH) */
+#damage-overlay {
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+    background: radial-gradient(circle, transparent 50%, rgba(255, 0, 0, 0.8) 100%);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.1s;
+    z-index: 20;
+}
+
+/* ỐNG NGẮM NHIỆT */
+#thermal-overlay {
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0, 255, 50, 0.1);
+    mix-blend-mode: luminosity; 
+    pointer-events: none; opacity: 0; transition: opacity 0.2s; z-index: 5;
+    filter: contrast(150%) brightness(1.2) sepia(100%) hue-rotate(50deg);
+}
+#scope-crosshair {
+    position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+    width: 600px; height: 600px;
+    border: 2px solid rgba(255, 0, 0, 0.6); border-radius: 50%;
+    opacity: 0; pointer-events: none; z-index: 6;
+}
+#scope-crosshair::after {
+    content: ''; position: absolute; top: 50%; left: 50%; width: 4px; height: 4px; background: red; transform: translate(-50%, -50%);
+}
+
+/* UI CHUNG */
+#blocker { position: absolute; width: 100%; height: 100%; background: rgba(0,0,0,0.9); display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 10; backdrop-filter: blur(5px); }
+#instructions { text-align: center; color: #d4e6d8; border: 1px solid #4a6b52; padding: 40px; background: rgba(20, 30, 20, 0.9); }
+h1 { font-family: 'Black Ops One'; color: #98ff98; font-size: 60px; margin: 0 0 20px 0; }
+.start-btn { font-size: 24px; padding: 15px 40px; background: #98ff98; border: none; cursor: pointer; font-family: 'Black Ops One'; }
+
+#hud { display: none; width: 100%; height: 100%; position: absolute; top: 0; pointer-events: none; }
+#crosshair { position: absolute; top: 50%; left: 50%; width: 40px; height: 40px; transform: translate(-50%, -50%); }
+#crosshair::before { content: ''; position: absolute; top: 19px; left: 0; width: 40px; height: 2px; background: rgba(255,255,255,0.8); }
+#crosshair::after { content: ''; position: absolute; left: 19px; top: 0; height: 40px; width: 2px; background: rgba(255,255,255,0.8); }
+
+.panel { position: absolute; padding: 15px; background: rgba(0,0,0,0.5); color: #fff; border: 1px solid #555; }
+#stats-panel { bottom: 30px; left: 30px; display: flex; gap: 30px; }
+.stat-value { font-size: 32px; font-weight: bold; color: #98ff98; font-family: 'Black Ops One'; }
+#weapon-panel { bottom: 30px; right: 30px; text-align: right; }
+#ammo-count { font-size: 48px; font-family: 'Black Ops One'; color: #ffeb3b; }
+#wave-indicator { top: 30px; left: 50%; transform: translateX(-50%); font-family: 'Black Ops One'; font-size: 24px; color: #ff5555; }

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>ZOMBIE CITY: OUTBREAK</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="blocker">
+        <div id="instructions">
+            <h1 class="title">ZOMBIE CITY</h1>
+            <p>THÀNH PHỐ ĐÃ BỊ NHIỄM BỆNH. HÃY SỐNG SÓT.</p>
+            
+            <div class="controls-box">
+                <div>[W,A,S,D] Di chuyển</div>
+                <div>[CHUỘT] Nhìn & Bắn</div>
+                <div>[SPACE] Nhảy</div>
+                <div>[R] Nạp đạn</div>
+                <div>[1, 2] Đổi súng</div>
+                <div>[SHIFT] Chạy nhanh</div>
+            </div>
+
+            <button class="start-btn">CLICK ĐỂ BẮT ĐẦU</button>
+        </div>
+    </div>
+
+    <div id="hud">
+        <div id="crosshair"></div>
+        
+        <div id="wave-indicator" class="panel">
+            <div class="stat-label">WAVE</div>
+            <div id="wave-text">1</div>
+        </div>
+
+        <div id="stats-panel" class="panel">
+            <div>
+                <div class="stat-value" id="hp-val">100</div>
+                <div class="stat-label">MÁU</div>
+            </div>
+            <div>
+                <div class="stat-value" id="score-val">0</div>
+                <div class="stat-label">ĐIỂM</div>
+            </div>
+        </div>
+
+        <div id="weapon-panel" class="panel">
+            <div id="weapon-name" class="stat-label">ASSAULT RIFLE</div>
+            <div id="ammo-count">30 / 120</div>
+        </div>
+
+        <div id="msg-center"></div>
+    </div>
+
+    <script type="importmap">
+        {
+            "imports": {
+                "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+                "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+            }
+        }
+    </script>
+    <script type="module" src="game.js"></script>
+</body>
+</html>
