@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thủ Thành Chiến Thuật - Bộ Sưu Tập</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            background-color: #0f172a;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: white;
+            overflow: hidden;
+        }
+        
+        /* Background Animation */
+        .bg-grid {
+            position: absolute; width: 200%; height: 200%; top: -50%; left: -50%;
+            background-image: 
+                linear-gradient(rgba(30, 41, 59, 0.8) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(30, 41, 59, 0.8) 1px, transparent 1px);
+            background-size: 40px 40px;
+            transform: perspective(500px) rotateX(60deg);
+            animation: moveGrid 20s linear infinite;
+            z-index: -1;
+            opacity: 0.5;
+        }
+        @keyframes moveGrid { 0% { transform: perspective(500px) rotateX(60deg) translateY(0); } 100% { transform: perspective(500px) rotateX(60deg) translateY(40px); } }
+
+        .card {
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            border: 1px solid rgba(255,255,255,0.1);
+            background: rgba(30, 41, 59, 0.6);
+            backdrop-filter: blur(10px);
+        }
+        .card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+            border-color: rgba(255,255,255,0.3);
+        }
+        
+        .card-v1:hover { border-color: #fbbf24; box-shadow: 0 0 20px rgba(251, 191, 36, 0.3); }
+        .card-v2:hover { border-color: #3b82f6; box-shadow: 0 0 20px rgba(59, 130, 246, 0.3); }
+        .card-v3:hover { border-color: #ef4444; box-shadow: 0 0 20px rgba(239, 68, 68, 0.3); }
+
+        .play-btn {
+            opacity: 0; transform: translateY(10px); transition: 0.3s;
+        }
+        .card:hover .play-btn {
+            opacity: 1; transform: translateY(0);
+        }
+    </style>
+</head>
+<body class="flex flex-col items-center justify-center min-h-screen relative">
+
+    <div class="bg-grid"></div>
+
+    <!-- Header -->
+    <div class="text-center mb-12 z-10">
+        <h1 class="text-6xl font-black mb-2 text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 via-orange-500 to-red-500" style="text-shadow: 0 4px 10px rgba(0,0,0,0.5);">
+            THỦ THÀNH CHIẾN THUẬT
+        </h1>
+        <p class="text-gray-400 text-xl tracking-widest uppercase">Bộ Sưu Tập Các Phiên Bản</p>
+    </div>
+
+    <!-- Cards Container -->
+    <div class="flex flex-wrap justify-center gap-8 z-10 px-4">
+        
+        <!-- Version 1 -->
+        <a href="./v1/index.html" class="card card-v1 w-80 p-6 rounded-2xl cursor-pointer group no-underline text-white relative overflow-hidden">
+            <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 text-8xl transition">🏰</div>
+            <div class="h-full flex flex-col">
+                <div class="text-yellow-400 font-bold text-sm mb-2 uppercase tracking-wide">Phiên bản 1.0</div>
+                <h2 class="text-3xl font-bold mb-4">Khởi Nguyên</h2>
+                <p class="text-gray-400 text-sm mb-6 flex-grow">
+                    Phiên bản đầu tiên với lối chơi cổ điển. Xây dựng tháp cung, pháo, phép để bảo vệ nhà chính khỏi quái vật cơ bản.
+                </p>
+                <div class="mt-auto">
+                    <div class="flex gap-2 mb-4 text-xs text-gray-500">
+                        <span class="bg-gray-800 px-2 py-1 rounded">Cổ điển</span>
+                        <span class="bg-gray-800 px-2 py-1 rounded">Đơn giản</span>
+                    </div>
+                    <button class="play-btn w-full py-3 bg-yellow-500 hover:bg-yellow-600 text-black font-bold rounded-lg shadow-lg transition">
+                        CHƠI NGAY ▶
+                    </button>
+                </div>
+            </div>
+        </a>
+
+        <!-- Version 2 -->
+        <a href="./v2/index.html" class="card card-v2 w-80 p-6 rounded-2xl cursor-pointer group no-underline text-white relative overflow-hidden">
+            <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 text-8xl transition">🛡️</div>
+            <div class="h-full flex flex-col">
+                <div class="text-blue-400 font-bold text-sm mb-2 uppercase tracking-wide">Phiên bản 2.0</div>
+                <h2 class="text-3xl font-bold mb-4">Huyền Thoại</h2>
+                <p class="text-gray-400 text-sm mb-6 flex-grow">
+                    Sự xuất hiện của các <b>Anh Hùng</b> và <b>Boss</b>. Hệ thống nâng cấp trụ, bán trụ và bản đồ mở rộng.
+                </p>
+                <div class="mt-auto">
+                    <div class="flex gap-2 mb-4 text-xs text-gray-500">
+                        <span class="bg-gray-800 px-2 py-1 rounded">Anh Hùng</span>
+                        <span class="bg-gray-800 px-2 py-1 rounded">Boss</span>
+                    </div>
+                    <button class="play-btn w-full py-3 bg-blue-500 hover:bg-blue-600 text-white font-bold rounded-lg shadow-lg transition">
+                        CHƠI NGAY ▶
+                    </button>
+                </div>
+            </div>
+        </a>
+
+        <!-- Version 3 -->
+        <a href="./v3/index.html" class="card card-v3 w-80 p-6 rounded-2xl cursor-pointer group no-underline text-white relative overflow-hidden transform scale-105 border-gray-500 shadow-2xl">
+            <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 text-8xl transition">🧟</div>
+            <div class="absolute top-0 left-0 bg-red-600 text-white text-xs font-bold px-3 py-1 rounded-br-lg">MỚI NHẤT</div>
+            <div class="h-full flex flex-col">
+                <div class="text-red-400 font-bold text-sm mb-2 uppercase tracking-wide">Phiên bản 3.3</div>
+                <h2 class="text-3xl font-bold mb-4">Tận Thế</h2>
+                <p class="text-gray-400 text-sm mb-6 flex-grow">
+                    Cuộc chiến sinh tồn chống lại <b>Zombie, UFO & Thiên Thạch</b>. Chế độ <b>Dev Mode</b> thỏa sức sáng tạo.
+                </p>
+                <div class="mt-auto">
+                    <div class="flex gap-2 mb-4 text-xs text-gray-500">
+                        <span class="bg-gray-800 px-2 py-1 rounded">Zombie</span>
+                        <span class="bg-gray-800 px-2 py-1 rounded">Kỹ Năng</span>
+                        <span class="bg-gray-800 px-2 py-1 rounded">Dev Mode</span>
+                    </div>
+                    <button class="w-full py-3 bg-red-600 hover:bg-red-700 text-white font-bold rounded-lg shadow-lg transition">
+                        CHIẾN LUÔN 🔥
+                    </button>
+                </div>
+            </div>
+        </a>
+
+    </div>
+
+    <div class="absolute bottom-4 text-gray-600 text-sm">
+        Game được phát triển bởi Bạn & Gemini AI
+    </div>
+
+</body>
+</html>
