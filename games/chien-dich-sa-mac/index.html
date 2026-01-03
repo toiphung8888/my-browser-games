@@ -1,0 +1,1044 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chiến Dịch Sa Mạc 4.0: Đại Chiến Căn Cứ</title>
+    <style>
+        /* --- CSS --- */
+        body {
+            margin: 0;
+            overflow: hidden;
+            background-color: #1a1a1a;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            user-select: none;
+        }
+
+        #gameContainer {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+        }
+
+        canvas {
+            display: block;
+        }
+
+        /* --- UI LAYER --- */
+        #uiLayer {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none;
+        }
+
+        /* Radar */
+        #radarContainer {
+            position: absolute;
+            top: 20px; left: 20px;
+            width: 200px; height: 200px;
+            border: 4px solid #444;
+            border-radius: 50%;
+            background-color: #001000;
+            overflow: hidden;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.8);
+            z-index: 10;
+        }
+        #radarCanvas { width: 100%; height: 100%; }
+        #radarOverlay {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            border-radius: 50%;
+            background: radial-gradient(circle, transparent 60%, rgba(0,20,0,0.8) 100%);
+            border: 1px solid rgba(0, 255, 0, 0.3);
+        }
+
+        /* Base Health Bars (Top Center) */
+        #baseStatus {
+            position: absolute;
+            top: 20px; left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 50px;
+            z-index: 10;
+        }
+        .base-hp-wrapper {
+            text-align: center;
+        }
+        .base-title {
+            color: #fff; font-weight: bold; font-size: 14px; margin-bottom: 5px; text-shadow: 1px 1px 2px #000;
+        }
+        .hp-box {
+            width: 300px; height: 25px;
+            background: #333; border: 2px solid #000;
+            position: relative;
+        }
+        #playerBaseBar { width: 100%; height: 100%; background: #3498db; transition: width 0.2s; }
+        #enemyBaseBar { width: 100%; height: 100%; background: #e74c3c; transition: width 0.2s; }
+
+        /* Player Stats (Right) */
+        #stats {
+            position: absolute; top: 20px; right: 20px;
+            color: white; text-align: right;
+            text-shadow: 2px 2px 4px black;
+        }
+        .bar-container {
+            width: 250px; height: 20px; background: #333;
+            margin-bottom: 8px; border: 2px solid #000;
+            position: relative;
+        }
+        #hpBar { width: 100%; height: 100%; background: #3498db; transition: width 0.1s; }
+        #boostBar { width: 100%; height: 100%; background: #f1c40f; transition: width 0.1s; }
+        
+        .overheated #boostBar { background: #555 !important; }
+        .overheated { border-color: #e74c3c !important; animation: shake 0.5s infinite; }
+
+        @keyframes shake {
+            0% { transform: translateX(0); }
+            25% { transform: translateX(-2px); }
+            50% { transform: translateX(2px); }
+            100% { transform: translateX(0); }
+        }
+        .bar-text {
+            position: absolute; top: 0; left: 5px; font-size: 12px; line-height: 20px; color: white; font-weight: bold;
+        }
+
+        /* Screens */
+        #startScreen, #gameOverScreen, #winScreen {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(10, 10, 10, 0.95);
+            display: flex; flex-direction: column;
+            justify-content: center; align-items: center;
+            color: white; pointer-events: auto; z-index: 100;
+        }
+
+        h1 { font-size: 56px; color: #e67e22; margin: 0 0 20px 0; text-transform: uppercase; letter-spacing: 2px; }
+        p { font-size: 18px; color: #bdc3c7; max-width: 650px; text-align: center; line-height: 1.6; }
+        .blue { color: #3498db; font-weight: bold; }
+        .red { color: #e74c3c; font-weight: bold; }
+        
+        button {
+            padding: 15px 50px; font-size: 24px; font-weight: bold;
+            background: linear-gradient(to bottom, #e67e22, #d35400);
+            color: white; border: none; cursor: pointer; margin-top: 40px;
+            border-radius: 8px; box-shadow: 0 4px #a04000;
+            transition: transform 0.1s;
+        }
+        button:active { transform: translateY(4px); box-shadow: 0 0 #a04000; }
+        button:hover { filter: brightness(1.1); }
+
+        .hidden { display: none !important; }
+        
+        /* Cảnh báo bom */
+        #warningMsg {
+            position: absolute; top: 20%; left: 50%; transform: translateX(-50%);
+            color: #e74c3c; font-size: 30px; font-weight: bold; 
+            text-shadow: 0 0 10px #000; display: none;
+            animation: blink 0.5s infinite;
+        }
+        @keyframes blink { 0% {opacity:1;} 50% {opacity:0;} 100% {opacity:1;} }
+
+    </style>
+</head>
+<body>
+
+<div id="gameContainer">
+    <canvas id="gameCanvas"></canvas>
+
+    <div id="uiLayer">
+        <!-- Radar -->
+        <div id="radarContainer">
+            <canvas id="radarCanvas"></canvas>
+            <div id="radarOverlay"></div>
+        </div>
+
+        <!-- Base HP Status -->
+        <div id="baseStatus">
+            <div class="base-hp-wrapper">
+                <div class="base-title blue">CĂN CỨ ĐỒNG MINH</div>
+                <div class="hp-box"><div id="playerBaseBar"></div></div>
+            </div>
+            <div class="base-hp-wrapper">
+                <div class="base-title red">CĂN CỨ ĐỊCH</div>
+                <div class="hp-box"><div id="enemyBaseBar"></div></div>
+            </div>
+        </div>
+
+        <!-- Player Stats -->
+        <div id="stats">
+            <div class="bar-container">
+                <div id="hpBar"></div>
+                <span class="bar-text">ĐỘ BỀN GIÁP (PLAYER)</span>
+            </div>
+            <div class="bar-container" id="boostContainer">
+                <div id="boostBar"></div>
+                <span class="bar-text" id="boostText">NITRO TĂNG TỐC</span>
+            </div>
+        </div>
+        
+        <div id="warningMsg">CẢNH BÁO: KHÔNG KÍCH!</div>
+
+        <!-- Start Screen -->
+        <div id="startScreen">
+            <h1>Đại Chiến Căn Cứ</h1>
+            <p>
+                <b>Nhiệm vụ:</b> Dẫn đầu đoàn quân xe tăng <span class="blue">Xanh Dương</span> tấn công và phá hủy <span class="red">Căn Cứ Địch</span>.<br>
+                Đồng thời phải bảo vệ Căn Cứ của mình khỏi sự tấn công của địch.<br><br>
+                <b>Cơ chế mới:</b><br>
+                - Mỗi bên giới hạn 10 xe tăng. Khi chết sẽ hồi sinh tại căn cứ.<br>
+                - AI thông minh hơn: Biết đi tuần, bảo vệ trụ và tránh tường.<br>
+                - Tầm đạn giảm để tránh bắn lén.<br>
+            </p>
+            <button onclick="startGame()">XUẤT KÍCH</button>
+        </div>
+
+        <!-- Game Over Screen -->
+        <div id="gameOverScreen" class="hidden">
+            <h1 style="color: #c0392b;">THẤT BẠI</h1>
+            <p id="failReason">Căn cứ của bạn đã thất thủ.</p>
+            <button onclick="resetGame()">TÁI ĐẤU</button>
+        </div>
+
+        <!-- Victory Screen -->
+        <div id="winScreen" class="hidden">
+            <h1 style="color: #2ecc71;">CHIẾN THẮNG!</h1>
+            <p>Căn cứ địch đã bị san phẳng. Lãnh thổ đã được giải phóng.</p>
+            <button onclick="resetGame()">CHƠI LẠI</button>
+        </div>
+    </div>
+</div>
+
+<script>
+/**
+ * --- JAVASCRIPT ---
+ */
+
+// --- Constants & Setup ---
+const CANVAS = document.getElementById('gameCanvas');
+const CTX = CANVAS.getContext('2d');
+const RADAR_CANVAS = document.getElementById('radarCanvas');
+const RADAR_CTX = RADAR_CANVAS.getContext('2d');
+
+const TILE_SIZE = 64;
+const MAP_WIDTH = 80;
+const MAP_HEIGHT = 80;
+const MAX_UNITS_PER_TEAM = 10;
+const BULLET_MAX_DIST = 400; // Giảm tầm bắn
+
+// Tile Types
+const TILE_SAND = 0;
+const TILE_WALL = 1;
+const TILE_WATER = 2;
+const TILE_SAFE_ZONE_BLUE = 3;
+const TILE_SAFE_ZONE_RED = 4;
+
+let camera = { x: 0, y: 0 };
+let map = [];
+let wallHealth = [];
+let entities = [];
+let particles = [];
+let bullets = [];
+let bombs = [];
+let bases = [];
+let player = null;
+
+let gameRunning = false;
+let mouse = { x: 0, y: 0, worldX: 0, worldY: 0 };
+let keys = {};
+let frameCount = 0;
+
+// Audio Context
+const AudioContext = window.AudioContext || window.webkitAudioContext;
+let audioCtx;
+let waterSoundNode, waterGainNode;
+
+function initAudio() {
+    if (!audioCtx) {
+        audioCtx = new AudioContext();
+        // Water Sound
+        const bufferSize = audioCtx.sampleRate * 2;
+        const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+        const data = buffer.getChannelData(0);
+        let lastOut = 0;
+        for (let i = 0; i < bufferSize; i++) {
+            const white = Math.random() * 2 - 1;
+            data[i] = (lastOut + (0.02 * white)) / 1.02;
+            lastOut = data[i];
+            data[i] *= 3.5; 
+        }
+        waterSoundNode = audioCtx.createBufferSource();
+        waterSoundNode.buffer = buffer;
+        waterSoundNode.loop = true;
+        const filter = audioCtx.createBiquadFilter();
+        filter.type = 'lowpass'; filter.frequency.value = 400;
+        waterGainNode = audioCtx.createGain();
+        waterGainNode.gain.value = 0;
+        waterSoundNode.connect(filter); filter.connect(waterGainNode);
+        waterGainNode.connect(audioCtx.destination);
+        waterSoundNode.start(0);
+    }
+    if (audioCtx.state === 'suspended') audioCtx.resume();
+}
+
+function playSound(type) {
+    if (!audioCtx) return;
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.connect(gain); gain.connect(audioCtx.destination);
+    const now = audioCtx.currentTime;
+
+    if (type === 'shoot') {
+        osc.type = 'square';
+        osc.frequency.setValueAtTime(150, now);
+        osc.frequency.exponentialRampToValueAtTime(0.01, now + 0.1);
+        gain.gain.setValueAtTime(0.2, now);
+        gain.gain.exponentialRampToValueAtTime(0.01, now + 0.1);
+        osc.start(now); osc.stop(now + 0.1);
+    } else if (type === 'explosion') {
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(100, now);
+        osc.frequency.exponentialRampToValueAtTime(0.01, now + 0.5);
+        gain.gain.setValueAtTime(0.4, now);
+        gain.gain.exponentialRampToValueAtTime(0.01, now + 0.5);
+        osc.start(now); osc.stop(now + 0.5);
+    } else if (type === 'bomb_drop') {
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(800, now);
+        osc.frequency.linearRampToValueAtTime(100, now + 1.0);
+        gain.gain.setValueAtTime(0.1, now);
+        gain.gain.linearRampToValueAtTime(0.5, now + 1.0);
+        gain.gain.linearRampToValueAtTime(0, now + 1.1);
+        osc.start(now); osc.stop(now + 1.1);
+    } else if (type === 'bomb_explode') {
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(50, now);
+        osc.frequency.exponentialRampToValueAtTime(0.01, now + 1.0);
+        gain.gain.setValueAtTime(0.8, now);
+        gain.gain.exponentialRampToValueAtTime(0.01, now + 1.0);
+        osc.start(now); osc.stop(now + 1.0);
+    }
+}
+
+// --- Classes ---
+
+class Particle {
+    constructor(x, y, type) {
+        this.x = x; this.y = y; this.type = type;
+        this.life = 1.0;
+        this.size = Math.random() * 8 + 4;
+        this.angle = Math.random() * Math.PI * 2;
+        this.decay = Math.random() * 0.03 + 0.02;
+        
+        if (type === 'trail') { this.decay = 0.08; this.size = 15; this.color = '#d35400'; }
+        else if (type === 'smoke') { this.color = 'rgba(100,100,100,0.5)'; }
+        else if (type === 'fire') { this.color = '#e74c3c'; this.decay = 0.05; }
+        else if (type === 'debris') { this.color = '#5d4037'; }
+    }
+    update() {
+        this.life -= this.decay;
+        this.x += Math.cos(this.angle) * 2;
+        this.y += Math.sin(this.angle) * 2;
+    }
+    draw() {
+        CTX.globalAlpha = this.life;
+        CTX.fillStyle = this.color || '#fff';
+        CTX.beginPath();
+        CTX.arc(this.x - camera.x, this.y - camera.y, this.size, 0, Math.PI*2);
+        CTX.fill();
+        CTX.globalAlpha = 1.0;
+    }
+}
+
+class BaseStructure {
+    constructor(x, y, team) {
+        this.x = x; this.y = y;
+        this.team = team; 
+        this.radius = 80; // Tăng kích thước
+        this.hp = 10000;
+        this.maxHp = 10000;
+        this.defenseRange = 700;
+        this.bombCooldown = 0;
+    }
+
+    update() {
+        if (this.hp <= 0) return;
+        if (this.bombCooldown > 0) this.bombCooldown--;
+
+        let enemiesNear = entities.filter(e => e.team !== this.team && !e.isDead && Math.hypot(e.x - this.x, e.y - this.y) < this.defenseRange);
+        
+        if (enemiesNear.length > 0 && this.bombCooldown <= 0) {
+            let target = enemiesNear[Math.floor(Math.random() * enemiesNear.length)];
+            let bombX = target.x + (Math.random() - 0.5) * 100;
+            let bombY = target.y + (Math.random() - 0.5) * 100;
+            
+            if (target.isPlayer) {
+                bombX = target.x + target.moveDir.x * 60; 
+                bombY = target.y + target.moveDir.y * 60;
+                document.getElementById('warningMsg').style.display = 'block';
+                setTimeout(() => document.getElementById('warningMsg').style.display = 'none', 1000);
+            }
+
+            bombs.push(new Bomb(bombX, bombY, this.team));
+            let dist = Math.hypot(target.x - this.x, target.y - this.y);
+            this.bombCooldown = dist < 300 ? 20 : 60;
+            playSound('bomb_drop');
+        }
+    }
+
+    draw() {
+        const sx = this.x - camera.x;
+        const sy = this.y - camera.y;
+        
+        // Vòng tròn bảo vệ
+        CTX.fillStyle = 'rgba(0, 0, 0, 0.3)';
+        CTX.beginPath(); CTX.arc(sx, sy, this.radius + 20, 0, Math.PI*2); CTX.fill();
+        
+        CTX.strokeStyle = this.team === 'blue' ? 'rgba(52, 152, 219, 0.5)' : 'rgba(231, 76, 60, 0.5)';
+        CTX.lineWidth = 5;
+        CTX.beginPath(); CTX.arc(sx, sy, this.radius + 20, 0, Math.PI*2); CTX.stroke();
+
+        // Nền Base
+        CTX.fillStyle = '#2c3e50';
+        CTX.fillRect(sx - 50, sy - 50, 100, 100);
+        
+        // Tháp canh 4 góc
+        CTX.fillStyle = '#555';
+        CTX.fillRect(sx - 60, sy - 60, 30, 30);
+        CTX.fillRect(sx + 30, sy - 60, 30, 30);
+        CTX.fillRect(sx - 60, sy + 30, 30, 30);
+        CTX.fillRect(sx + 30, sy + 30, 30, 30);
+
+        // Cờ Base
+        CTX.fillStyle = this.team === 'blue' ? '#3498db' : '#e74c3c';
+        CTX.beginPath();
+        CTX.moveTo(sx, sy - 40);
+        CTX.lineTo(sx + 30, sy - 25);
+        CTX.lineTo(sx, sy - 10);
+        CTX.fill();
+        CTX.strokeStyle = '#fff'; CTX.lineWidth = 3;
+        CTX.beginPath(); CTX.moveTo(sx, sy+20); CTX.lineTo(sx, sy-40); CTX.stroke();
+
+        // HP
+        CTX.fillStyle = '#000';
+        CTX.fillRect(sx - 60, sy - 80, 120, 10);
+        CTX.fillStyle = this.team === 'blue' ? '#3498db' : '#e74c3c';
+        CTX.fillRect(sx - 60, sy - 80, 120 * (this.hp / this.maxHp), 10);
+    }
+}
+
+class Bomb {
+    constructor(x, y, team) {
+        this.x = x; this.y = y;
+        this.team = team;
+        this.timer = 90;
+        this.maxTimer = 90;
+        this.radius = 80;
+        this.damage = 150;
+    }
+
+    update() {
+        this.timer--;
+        if (this.timer <= 0) this.explode();
+    }
+
+    explode() {
+        playSound('bomb_explode');
+        for(let i=0; i<20; i++) particles.push(new Particle(this.x, this.y, 'fire'));
+        for(let i=0; i<10; i++) particles.push(new Particle(this.x, this.y, 'smoke'));
+        entities.forEach(e => {
+            if (!e.isDead && Math.hypot(e.x - this.x, e.y - this.y) < this.radius) {
+                e.takeDamage(this.damage);
+            }
+        });
+        bombs.splice(bombs.indexOf(this), 1);
+    }
+
+    draw() {
+        const sx = this.x - camera.x;
+        const sy = this.y - camera.y;
+        let progress = 1 - (this.timer / this.maxTimer);
+        
+        CTX.fillStyle = 'rgba(0, 0, 0, 0.5)';
+        CTX.beginPath(); CTX.arc(sx, sy, this.radius * progress, 0, Math.PI*2); CTX.fill();
+
+        CTX.strokeStyle = `rgba(231, 76, 60, ${progress})`;
+        CTX.lineWidth = 2;
+        CTX.beginPath(); CTX.arc(sx, sy, this.radius, 0, Math.PI*2); CTX.stroke();
+
+        let height = this.timer * 5;
+        CTX.fillStyle = '#000';
+        CTX.beginPath(); CTX.arc(sx, sy - height, 10 + progress*10, 0, Math.PI*2); CTX.fill();
+    }
+}
+
+class Bullet {
+    constructor(x, y, angle, owner) {
+        this.x = x; this.y = y; this.angle = angle;
+        this.speed = 18; this.radius = 5;
+        this.owner = owner;
+        this.team = owner.team;
+        this.distTraveled = 0;
+        this.maxDist = BULLET_MAX_DIST;
+        this.damage = owner.isPlayer ? 40 : 15;
+        this.active = true;
+    }
+    update() {
+        if(!this.active) return;
+        
+        let vx = Math.cos(this.angle) * this.speed;
+        let vy = Math.sin(this.angle) * this.speed;
+        this.x += vx;
+        this.y += vy;
+        this.distTraveled += this.speed;
+
+        if (this.distTraveled >= this.maxDist) {
+            this.destroy(); return;
+        }
+
+        // Fix freeze: Check map bounds before accessing map array
+        if (isSolid(this.x, this.y)) {
+            const col = Math.floor(this.x / TILE_SIZE);
+            const row = Math.floor(this.y / TILE_SIZE);
+            // Bounds check added
+            if (col >= 0 && col < MAP_WIDTH && row >= 0 && row < MAP_HEIGHT) {
+                if (map[row][col] === TILE_WALL) {
+                    wallHealth[row][col]--;
+                    particles.push(new Particle(this.x, this.y, 'debris'));
+                    if (wallHealth[row][col] <= 0) {
+                        map[row][col] = TILE_SAND;
+                        playSound('explosion');
+                    }
+                }
+            }
+            this.destroy(); return;
+        }
+        
+        for (let base of bases) {
+            if (base.team !== this.team && base.hp > 0) {
+                if (Math.hypot(this.x - base.x, this.y - base.y) < base.radius) {
+                    base.hp -= this.damage;
+                    this.destroy();
+                    if (base.hp <= 0) endGame(base.team === 'red');
+                    return;
+                }
+            }
+        }
+    }
+    
+    destroy() {
+        this.active = false;
+        particles.push(new Particle(this.x, this.y, 'smoke'));
+    }
+
+    draw() {
+        CTX.fillStyle = this.team === 'blue' ? '#00ffff' : '#ff5555';
+        CTX.beginPath(); CTX.arc(this.x - camera.x, this.y - camera.y, this.radius, 0, Math.PI*2); CTX.fill();
+        CTX.shadowBlur = 5; CTX.shadowColor = CTX.fillStyle; CTX.fill(); CTX.shadowBlur = 0;
+    }
+}
+
+class Tank {
+    constructor(x, y, team, isPlayer, role = 'ATTACKER') {
+        this.x = x; this.y = y;
+        this.team = team;
+        this.isPlayer = isPlayer;
+        this.angle = 0; 
+        this.turretAngle = 0;
+        this.role = role; // 'ATTACKER' or 'DEFENDER'
+        
+        this.radius = isPlayer ? 24 : 20;
+        this.maxSpeed = isPlayer ? 5.5 : 3.0;
+        this.maxHp = isPlayer ? 3000 : 300; 
+        this.hp = this.maxHp;
+        
+        this.boostFuel = 100;
+        this.isBoosting = false;
+        this.overheated = false;
+        this.overheatTimer = 0;
+        
+        this.isDead = false;
+        this.deadTimer = 0; // Time before respawn
+        this.cooldown = 0;
+        this.moveDir = {x:0, y:0};
+        this.changeDirTimer = 0;
+    }
+
+    takeDamage(amount) {
+        if(this.isDead) return;
+        this.hp -= amount;
+        if (this.hp <= 0) {
+            this.hp = 0;
+            this.isDead = true;
+            this.deadTimer = 180; // 3 giây hồi sinh
+            playSound('explosion');
+            for(let i=0; i<8; i++) particles.push(new Particle(this.x, this.y, 'fire'));
+        }
+    }
+
+    respawn() {
+        let base = bases.find(b => b.team === this.team);
+        if(base) {
+            this.x = base.x + (Math.random()-0.5)*200;
+            this.y = base.y + (Math.random()-0.5)*200;
+            this.hp = this.maxHp;
+            this.isDead = false;
+            // Clear collision on spawn
+            while(isSolid(this.x, this.y)) {
+                this.x = base.x + (Math.random()-0.5)*300;
+                this.y = base.y + (Math.random()-0.5)*300;
+            }
+        }
+    }
+
+    update() {
+        if (this.isDead) {
+            if (Math.random() < 0.1) particles.push(new Particle(this.x, this.y, 'smoke'));
+            this.deadTimer--;
+            if(this.deadTimer <= 0) this.respawn();
+            return;
+        }
+
+        if (this.isPlayer) this.handlePlayer();
+        else this.handleAI();
+
+        let vx = this.moveDir.x * this.maxSpeed;
+        let vy = this.moveDir.y * this.maxSpeed;
+
+        if (this.isPlayer) {
+            if (this.overheated) {
+                this.overheatTimer--;
+                if (this.overheatTimer <= 0) { this.overheated = false; document.getElementById('boostContainer').classList.remove('overheated'); }
+            } else if (this.isBoosting && this.boostFuel > 0) {
+                vx *= 1.8; vy *= 1.8;
+                this.boostFuel -= 1;
+                particles.push(new Particle(this.x, this.y, 'trail'));
+                if (this.boostFuel <= 0) {
+                    this.overheated = true; this.overheatTimer = 300;
+                    document.getElementById('boostContainer').classList.add('overheated');
+                }
+            } else if (this.boostFuel < 100) this.boostFuel += 0.3;
+        }
+
+        if (Math.abs(vx) > 0.1 || Math.abs(vy) > 0.1) {
+            const ma = Math.atan2(vy, vx);
+            let d = ma - this.angle;
+            while (d < -Math.PI) d += Math.PI*2; while (d > Math.PI) d -= Math.PI*2;
+            this.angle += d * 0.15;
+        }
+        
+        // Physics collision check
+        if (!isSolid(this.x + vx, this.y)) this.x += vx;
+        if (!isSolid(this.x, this.y + vy)) this.y += vy;
+
+        entities.forEach(e => {
+            if (e !== this && !e.isDead) {
+                let dist = Math.hypot(this.x - e.x, this.y - e.y);
+                if (dist < this.radius + e.radius) {
+                    let angle = Math.atan2(this.y - e.y, this.x - e.x);
+                    this.x += Math.cos(angle); this.y += Math.sin(angle);
+                }
+            }
+        });
+
+        if (this.cooldown > 0) this.cooldown--;
+    }
+
+    handlePlayer() {
+        this.moveDir = {x:0, y:0};
+        if (keys['w']) this.moveDir.y = -1;
+        if (keys['s']) this.moveDir.y = 1;
+        if (keys['a']) this.moveDir.x = -1;
+        if (keys['d']) this.moveDir.x = 1;
+        let l = Math.hypot(this.moveDir.x, this.moveDir.y);
+        if(l>0) { this.moveDir.x/=l; this.moveDir.y/=l; }
+
+        this.isBoosting = keys['MouseRight'] && !this.overheated;
+        this.turretAngle = Math.atan2(mouse.worldY - this.y, mouse.worldX - this.x);
+        if (keys['MouseLeft'] && this.cooldown <= 0) this.shoot();
+    }
+
+    handleAI() {
+        // Improved AI with Obstacle Avoidance and Roles
+        let targetPos = null;
+        let enemyBase = bases.find(b => b.team !== this.team);
+        let myBase = bases.find(b => b.team === this.team);
+
+        // Scan for enemies
+        let nearestEnemy = null;
+        let minD = 500;
+        entities.forEach(e => {
+            if (e.team !== this.team && !e.isDead) {
+                let d = Math.hypot(e.x - this.x, e.y - this.y);
+                if (d < minD && !isWallBetween(this.x, this.y, e.x, e.y)) {
+                    minD = d;
+                    nearestEnemy = e;
+                }
+            }
+        });
+
+        if (nearestEnemy) {
+            // Combat logic
+            let targetAngle = Math.atan2(nearestEnemy.y - this.y, nearestEnemy.x - this.x);
+            this.turretAngle = targetAngle;
+            
+            if (minD > 300) { // Chase
+                targetPos = {x: nearestEnemy.x, y: nearestEnemy.y};
+            } else if (minD < 100) { // Retreat
+                targetPos = {x: this.x - Math.cos(targetAngle)*100, y: this.y - Math.sin(targetAngle)*100};
+            } else { // Stand ground
+                targetPos = {x: this.x, y: this.y}; 
+            }
+
+            if (this.cooldown <= 0) {
+                this.shoot();
+                this.cooldown = 60 + Math.random() * 60;
+            }
+        } else {
+            // Role behavior
+            if (this.role === 'DEFENDER' && myBase) {
+                // Stay near base, patrol around it
+                let dToBase = Math.hypot(this.x - myBase.x, this.y - myBase.y);
+                if (dToBase > 300) {
+                    targetPos = {x: myBase.x, y: myBase.y}; // Return to base
+                } else {
+                    // Patrol circle around base
+                    this.changeDirTimer--;
+                    if(this.changeDirTimer <= 0) {
+                        let patrolAngle = Math.random() * Math.PI * 2;
+                        this.patrolTarget = {
+                            x: myBase.x + Math.cos(patrolAngle) * 200,
+                            y: myBase.y + Math.sin(patrolAngle) * 200
+                        };
+                        this.changeDirTimer = 200;
+                    }
+                    targetPos = this.patrolTarget || {x: myBase.x, y: myBase.y};
+                }
+            } else if (this.role === 'ATTACKER' && enemyBase) {
+                // Move towards enemy base
+                targetPos = {x: enemyBase.x, y: enemyBase.y};
+                
+                let dBase = Math.hypot(enemyBase.x - this.x, enemyBase.y - this.y);
+                if (dBase < 500) {
+                    this.turretAngle = Math.atan2(enemyBase.y - this.y, enemyBase.x - this.x);
+                    if (this.cooldown <= 0) { this.shoot(); this.cooldown = 60; }
+                }
+                if (dBase < 250) targetPos = {x: this.x, y: this.y}; // Don't crash into base
+            }
+        }
+
+        // Apply Movement with Obstacle Avoidance
+        if (targetPos) {
+            let dx = targetPos.x - this.x;
+            let dy = targetPos.y - this.y;
+            let dist = Math.hypot(dx, dy);
+            
+            if (dist > 10) {
+                let desiredAngle = Math.atan2(dy, dx);
+                
+                // Raycast to check for wall ahead
+                const lookAhead = 80;
+                const forwardX = this.x + Math.cos(desiredAngle) * lookAhead;
+                const forwardY = this.y + Math.sin(desiredAngle) * lookAhead;
+                
+                if (isSolid(forwardX, forwardY)) {
+                    // Wall ahead! Try rotating left/right
+                    let leftX = this.x + Math.cos(desiredAngle - 0.5) * lookAhead;
+                    let leftY = this.y + Math.sin(desiredAngle - 0.5) * lookAhead;
+                    
+                    if (!isSolid(leftX, leftY)) {
+                        desiredAngle -= 0.8;
+                    } else {
+                        desiredAngle += 0.8;
+                    }
+                }
+
+                this.moveDir.x = Math.cos(desiredAngle);
+                this.moveDir.y = Math.sin(desiredAngle);
+                if (!nearestEnemy && this.role !== 'DEFENDER') this.turretAngle = desiredAngle;
+            } else {
+                this.moveDir = {x:0, y:0};
+            }
+        }
+    }
+
+    shoot() {
+        playSound('shoot');
+        let bx = this.x + Math.cos(this.turretAngle)*35;
+        let by = this.y + Math.sin(this.turretAngle)*35;
+        bullets.push(new Bullet(bx, by, this.turretAngle, this));
+        if (this.isPlayer) this.cooldown = 15;
+    }
+
+    draw() {
+        if(this.isDead) { // Draw visual for dead tank before respawn
+            const sx = this.x - camera.x, sy = this.y - camera.y;
+            CTX.save(); CTX.translate(sx, sy); CTX.rotate(this.angle);
+            CTX.fillStyle = '#222'; CTX.fillRect(-20,-20,40,40);
+            CTX.restore();
+            return;
+        }
+
+        const sx = this.x - camera.x;
+        const sy = this.y - camera.y;
+        CTX.save();
+        CTX.translate(sx, sy);
+
+        let bodyColor = this.team === 'blue' ? (this.isPlayer ? '#2980b9' : '#3498db') : '#c0392b';
+        let turretColor = this.team === 'blue' ? '#5dade2' : '#e74c3c';
+        
+        // Icon role
+        if(this.role === 'DEFENDER') {
+            CTX.fillStyle = '#f1c40f';
+            CTX.beginPath(); CTX.arc(0, 0, 30, 0, Math.PI*2); CTX.stroke();
+        }
+
+        CTX.rotate(this.angle);
+        CTX.fillStyle = bodyColor;
+        CTX.fillRect(-22, -18, 44, 36);
+        CTX.strokeStyle = '#000'; CTX.lineWidth = 2; CTX.strokeRect(-22, -18, 44, 36);
+        
+        CTX.fillStyle = '#111';
+        for(let i=-22; i<20; i+=8) { CTX.fillRect(i, -24, 6, 6); CTX.fillRect(i, 18, 6, 6); }
+        
+        CTX.rotate(-this.angle);
+        CTX.rotate(this.turretAngle);
+        CTX.fillStyle = '#333'; CTX.fillRect(0, -6, 40, 12);
+        CTX.fillStyle = turretColor;
+        CTX.beginPath(); CTX.arc(0, 0, 14, 0, Math.PI*2); CTX.fill(); CTX.stroke();
+        CTX.restore();
+
+        CTX.fillStyle = '#000'; CTX.fillRect(sx-20, sy-40, 40, 5);
+        CTX.fillStyle = this.team === 'blue' ? '#00ff00' : '#ff0000';
+        CTX.fillRect(sx-20, sy-40, 40 * (this.hp/this.maxHp), 5);
+    }
+}
+
+// --- World ---
+
+function generateMap() {
+    map = []; wallHealth = [];
+    for (let y=0; y<MAP_HEIGHT; y++) {
+        let row = [], hpRow = [];
+        for (let x=0; x<MAP_WIDTH; x++) {
+            row.push(TILE_SAND); hpRow.push(0);
+        }
+        map.push(row); wallHealth.push(hpRow);
+    }
+    
+    for(let i=0; i<100; i++) {
+        let cx = Math.floor(Math.random()*MAP_WIDTH), cy = Math.floor(Math.random()*MAP_HEIGHT);
+        let size = Math.floor(Math.random()*3)+1;
+        for(let y=cy-size; y<=cy+size; y++)
+            for(let x=cx-size; x<=cx+size; x++)
+                if(x>0 && x<MAP_WIDTH && y>0 && y<MAP_HEIGHT && Math.random()>0.3) {
+                    map[y][x] = TILE_WALL; wallHealth[y][x] = 4;
+                }
+    }
+
+    let riverY = MAP_HEIGHT/2;
+    for(let x=0; x<MAP_WIDTH; x++) {
+        let off = Math.sin(x*0.1)*10;
+        let ry = Math.floor(riverY + off);
+        for(let w=0; w<3; w++) {
+            if(ry+w > 0 && ry+w < MAP_HEIGHT) {
+                map[ry+w][x] = TILE_WATER;
+                if(ry+w-1>=0) map[ry+w-1][x] = TILE_SAND;
+            }
+        }
+    }
+
+    for(let y=0; y<15; y++) for(let x=0; x<15; x++) { map[y][x] = TILE_SAFE_ZONE_BLUE; wallHealth[y][x]=0; }
+    for(let y=MAP_HEIGHT-15; y<MAP_HEIGHT; y++) for(let x=MAP_WIDTH-15; x<MAP_WIDTH; x++) { map[y][x] = TILE_SAFE_ZONE_RED; wallHealth[y][x]=0; }
+
+    bases = [
+        new BaseStructure(5*TILE_SIZE, 5*TILE_SIZE, 'blue'),
+        new BaseStructure((MAP_WIDTH-5)*TILE_SIZE, (MAP_HEIGHT-5)*TILE_SIZE, 'red')
+    ];
+}
+
+function startGame() {
+    initAudio();
+    document.getElementById('startScreen').classList.add('hidden');
+    document.getElementById('gameOverScreen').classList.add('hidden');
+    document.getElementById('winScreen').classList.add('hidden');
+    
+    generateMap();
+    
+    player = new Tank(7*TILE_SIZE, 7*TILE_SIZE, 'blue', true, 'ATTACKER');
+    entities = [player];
+
+    // Spawn Allies (9 units)
+    for(let i=0; i<9; i++) {
+        let role = i < 3 ? 'DEFENDER' : 'ATTACKER';
+        let x = (Math.random()*10 + 2) * TILE_SIZE;
+        let y = (Math.random()*10 + 2) * TILE_SIZE;
+        entities.push(new Tank(x, y, 'blue', false, role));
+    }
+
+    // Spawn Enemies (10 units)
+    for(let i=0; i<10; i++) {
+        let role = i < 4 ? 'DEFENDER' : 'ATTACKER'; // 4 thủ, 6 công
+        let x = (MAP_WIDTH - Math.random()*10 - 2) * TILE_SIZE;
+        let y = (MAP_HEIGHT - Math.random()*10 - 2) * TILE_SIZE;
+        entities.push(new Tank(x, y, 'red', false, role));
+    }
+
+    bullets = [];
+    bombs = [];
+    gameRunning = true;
+    requestAnimationFrame(gameLoop);
+}
+
+function resetGame() { startGame(); }
+
+function isSolid(x, y) {
+    let c = Math.floor(x/TILE_SIZE), r = Math.floor(y/TILE_SIZE);
+    if(c<0||c>=MAP_WIDTH||r<0||r>=MAP_HEIGHT) return true;
+    if(map[r][c] === TILE_WALL) return true;
+    return false;
+}
+function isWallBetween(x1,y1,x2,y2) {
+    let steps = Math.hypot(x2-x1,y2-y1)/30;
+    for(let i=0;i<steps;i++) {
+        let tx=x1+(x2-x1)*(i/steps), ty=y1+(y2-y1)*(i/steps);
+        if(isSolid(tx,ty)) return true;
+    }
+    return false;
+}
+
+function update() {
+    if(!gameRunning) return;
+    
+    if (waterGainNode && player) {
+        let nearest = 9999;
+        let px = Math.floor(player.x/TILE_SIZE), py = Math.floor(player.y/TILE_SIZE);
+        for(let y=py-10; y<=py+10; y++) for(let x=px-10; x<=px+10; x++) {
+            if(y>=0 && y<MAP_HEIGHT && x>=0 && x<MAP_WIDTH && map[y][x]===TILE_WATER) {
+                let d = Math.hypot(x*TILE_SIZE-player.x, y*TILE_SIZE-player.y);
+                if(d<nearest) nearest=d;
+            }
+        }
+        waterGainNode.gain.setTargetAtTime(nearest<600 ? (1-nearest/600)*0.3 : 0, audioCtx.currentTime, 0.1);
+    }
+
+    bases.forEach(b => b.update());
+    bombs.forEach(b => b.update());
+    entities.forEach(e => e.update());
+    
+    bullets.forEach(b => b.update());
+    bullets = bullets.filter(b => b.active);
+
+    bullets.forEach(b => {
+        if(!b.active) return;
+        for(let e of entities) {
+            if(e.team !== b.team && !e.isDead && Math.hypot(b.x-e.x, b.y-e.y) < e.radius + b.radius) {
+                e.takeDamage(b.damage);
+                b.destroy();
+                break;
+            }
+        }
+    });
+
+    particles.forEach((p,i) => { p.update(); if(p.life<=0) particles.splice(i,1); });
+
+    camera.x = player.x - CANVAS.width/2;
+    camera.y = player.y - CANVAS.height/2;
+    camera.x = Math.max(0, Math.min(camera.x, MAP_WIDTH*TILE_SIZE - CANVAS.width));
+    camera.y = Math.max(0, Math.min(camera.y, MAP_HEIGHT*TILE_SIZE - CANVAS.height));
+
+    document.getElementById('hpBar').style.width = (player.hp/player.maxHp)*100 + '%';
+    document.getElementById('boostBar').style.width = player.boostFuel + '%';
+    
+    let blueBase = bases.find(b=>b.team==='blue');
+    let redBase = bases.find(b=>b.team==='red');
+    document.getElementById('playerBaseBar').style.width = (blueBase.hp/blueBase.maxHp)*100 + '%';
+    document.getElementById('enemyBaseBar').style.width = (redBase.hp/redBase.maxHp)*100 + '%';
+}
+
+function draw() {
+    CTX.fillStyle = '#222'; CTX.fillRect(0,0,CANVAS.width, CANVAS.height);
+    
+    let sc = Math.floor(camera.x/TILE_SIZE), ec = sc + CANVAS.width/TILE_SIZE + 2;
+    let sr = Math.floor(camera.y/TILE_SIZE), er = sr + CANVAS.height/TILE_SIZE + 2;
+    let time = Date.now()*0.002;
+
+    for(let y=sr; y<er; y++) for(let x=sc; x<ec; x++) {
+        if(y<0||y>=MAP_HEIGHT||x<0||x>=MAP_WIDTH) continue;
+        let t = map[y][x], dx = Math.floor(x*TILE_SIZE-camera.x), dy = Math.floor(y*TILE_SIZE-camera.y);
+        
+        if(t===TILE_SAND || t===TILE_SAFE_ZONE_BLUE || t===TILE_SAFE_ZONE_RED) {
+            CTX.fillStyle = t===TILE_SAFE_ZONE_BLUE ? '#1a252f' : (t===TILE_SAFE_ZONE_RED ? '#2c1a1a' : '#e6c288');
+            CTX.fillRect(dx,dy,TILE_SIZE,TILE_SIZE);
+            if(t===TILE_SAND && (x+y)%7===0) {
+                 CTX.fillStyle='#dcb076'; CTX.beginPath(); CTX.arc(dx+30,dy+30,4,0,Math.PI*2); CTX.fill();
+            }
+        } else if(t===TILE_WALL) {
+            CTX.fillStyle='#5d4037'; CTX.fillRect(dx,dy,TILE_SIZE,TILE_SIZE);
+            CTX.fillStyle='#3e2723'; CTX.fillRect(dx+5,dy+5,TILE_SIZE-10,TILE_SIZE-10);
+            if(wallHealth[y][x] < 4) { 
+                CTX.strokeStyle='#000'; CTX.lineWidth=2; 
+                CTX.beginPath(); CTX.moveTo(dx+10,dy+10); CTX.lineTo(dx+50,dy+50); CTX.stroke();
+            }
+        } else if(t===TILE_WATER) {
+            CTX.fillStyle='#2980b9'; CTX.fillRect(dx,dy,TILE_SIZE,TILE_SIZE);
+            CTX.strokeStyle='#5dade2'; CTX.lineWidth=2; CTX.beginPath();
+            for(let i=0; i<3; i++) {
+                let wy = dy+10+i*15+Math.sin(x+time)*5;
+                CTX.moveTo(dx,wy); CTX.lineTo(dx+TILE_SIZE,wy);
+            }
+            CTX.stroke();
+        }
+    }
+
+    bombs.forEach(b => b.draw()); 
+    bases.forEach(b => b.draw());
+    entities.forEach(e => e.draw());
+    bullets.forEach(b=>b.draw());
+    particles.forEach(p=>p.draw());
+    
+    drawRadar();
+}
+
+function drawRadar() {
+    const w = RADAR_CANVAS.width, h = RADAR_CANVAS.height;
+    RADAR_CTX.clearRect(0,0,w,h);
+    let sx = w / (MAP_WIDTH*TILE_SIZE), sy = h / (MAP_HEIGHT*TILE_SIZE);
+
+    bases.forEach(b => {
+        RADAR_CTX.fillStyle = b.team === 'blue' ? '#3498db' : '#e74c3c';
+        RADAR_CTX.fillRect(b.x*sx - 5, b.y*sy - 5, 10, 10);
+    });
+
+    entities.forEach(e => {
+        if(e.isDead) return;
+        RADAR_CTX.fillStyle = e.isPlayer ? '#fff' : (e.team==='blue'?'#3498db':'#e74c3c');
+        let size = e.isPlayer ? 3 : 2;
+        RADAR_CTX.beginPath(); RADAR_CTX.arc(e.x*sx, e.y*sy, size, 0, Math.PI*2); RADAR_CTX.fill();
+    });
+}
+
+function endGame(win) {
+    gameRunning = false;
+    document.getElementById(win ? 'winScreen' : 'gameOverScreen').classList.remove('hidden');
+}
+function gameLoop() {
+    if(!gameRunning) return;
+    update(); draw(); frameCount++;
+    requestAnimationFrame(gameLoop);
+}
+
+// Events
+window.addEventListener('resize', () => { CANVAS.width=window.innerWidth; CANVAS.height=window.innerHeight; RADAR_CANVAS.width=200; RADAR_CANVAS.height=200; });
+window.dispatchEvent(new Event('resize'));
+window.addEventListener('keydown', e => keys[e.key]=true);
+window.addEventListener('keyup', e => keys[e.key]=false);
+window.addEventListener('mousemove', e => {
+    let r = CANVAS.getBoundingClientRect();
+    mouse.x=e.clientX-r.left; mouse.y=e.clientY-r.top;
+    mouse.worldX=mouse.x+camera.x; mouse.worldY=mouse.y+camera.y;
+});
+window.addEventListener('mousedown', e => { if(e.button===0) keys['MouseLeft']=true; if(e.button===2) keys['MouseRight']=true; });
+window.addEventListener('mouseup', e => { if(e.button===0) keys['MouseLeft']=false; if(e.button===2) keys['MouseRight']=false; });
+window.addEventListener('contextmenu', e=>e.preventDefault());
+
+</script>
+</body>
+</html>
